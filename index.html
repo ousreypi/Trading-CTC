@@ -1,0 +1,3514 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradingView Pro - Institutional Charting & SMC Analysis</title>
+  <meta name="description"
+    content="Professional real-time financial charting platform featuring ICT / Smart Money Concepts, Order Blocks, FVGs, Live Crypto & Forex Feeds, and Paper Trading.">
+  <link rel="stylesheet" href="styles.css?v=4.9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- TOP HEADER (TradingView Pro Navigation Bar) -->
+  <header class="tv-header">
+    <div class="tv-header-left">
+      <!-- User Profile Avatar & Switcher -->
+      <div class="tv-user-profile-wrap" id="btn-user-profile-left" title="User Profile / Switch Account (ប្តូរគណនី)">
+        <div class="tv-user-avatar">
+          <div class="tv-avatar-dot"></div>
+        </div>
+        <span class="tv-user-name" id="top-user-name">Trader 1</span>
+        <svg class="tv-user-caret" viewBox="0 0 10 6" width="7" height="4" fill="none" stroke="currentColor"
+          stroke-width="1.6">
+          <path d="M1 1l4 4 4-4" />
+        </svg>
+      </div>
+
+      <!-- Cloud Auto-Save Status -->
+      <div class="tv-cloud-status saved" id="tv-cloud-status" title="SQLite Cloud Auto-Save (ការរក្សាទុកស្វ័យប្រវត្តិ)">
+        <svg class="tv-cloud-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+          <polyline points="9 13 12 16 17 11" />
+        </svg>
+        <span class="tv-cloud-text" id="tv-cloud-text">Saved</span>
+      </div>
+
+      <!-- Current Symbol Button (TradingView Pill) -->
+      <div class="tv-symbol-pill-btn" id="btn-symbol-search" data-i18n-title="search_symbols"
+        title="ស្វែងរកនិមិត្តសញ្ញា (Search Symbol)">
+        <span class="tv-sym-name" id="header-symbol-name">XAUUSD</span>
+        <span class="tv-sym-diamond" title="Market Data Status">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 9l10 13 10-13-10-13zm0 3.2L18.4 9 12 17.5 5.6 9 12 5.2z" />
+          </svg>
+        </span>
+        <!-- Hidden elements for dynamic script bindings -->
+        <span id="header-symbol-price" style="display: none;">4140.31</span>
+        <span id="header-symbol-change" style="display: none;">-0.99%</span>
+        <span id="header-symbol-icon" style="display: none;">🥇</span>
+      </div>
+
+      <!-- Compare / Add Symbol Button -->
+      <button class="tv-header-icon-btn" id="btn-compare" title="ប្រៀបធៀប ឬបន្ថែមនិមិត្តសញ្ញា (Compare or Add Symbol)">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 8v8M8 12h8" />
+        </svg>
+      </button>
+
+      <div class="tv-header-sep"></div>
+
+      <!-- Timeframe Buttons -->
+      <div class="tv-header-timeframes" id="timeframe-container">
+        <button class="tv-tf-btn" data-tf="15s">15s</button>
+        <button class="tv-tf-btn" data-tf="1m">1m</button>
+        <button class="tv-tf-btn" data-tf="3m">3m</button>
+        <button class="tv-tf-btn active" data-tf="5m">5m</button>
+        <button class="tv-tf-btn" data-tf="15m">15m</button>
+        <button class="tv-tf-btn" data-tf="30m">30m</button>
+        <button class="tv-tf-btn" data-tf="1h">1h</button>
+        <button class="tv-tf-btn" data-tf="4h">4h</button>
+        <button class="tv-tf-btn" data-tf="1D">D</button>
+        <button class="tv-tf-btn" data-tf="1W">W</button>
+        <button class="tv-tf-dropdown-btn" id="btn-tf-dropdown" title="ពេលវេលាបន្ថែម (More Timeframes)">
+          <svg viewBox="0 0 10 6">
+            <path d="M1 1l4 4 4-4" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="tv-header-sep"></div>
+
+      <!-- Chart Types (Line & Candles) -->
+      <button class="tv-header-icon-btn" id="btn-chart-line" title="បន្ទាត់ Line Chart">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 17l6-6 4 4 8-8" />
+        </svg>
+      </button>
+      <button class="tv-header-chart-type active" id="btn-chart-type" title="ទៀនជប៉ុន Candles">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 3v3M7 18v3M5 6h4v12H5zM17 5v2M17 17v2M15 7h4v10h-4z" />
+        </svg>
+        <svg class="chevron" viewBox="0 0 10 6">
+          <path d="M1 1l4 4 4-4" />
+        </svg>
+        <span id="chart-type-label" style="display: none;">Candles</span>
+      </button>
+
+      <div class="tv-header-sep"></div>
+
+      <!-- Technical Indicators Modal Button -->
+      <button class="tv-header-btn" id="btn-indicators-modal" title="សូចនាករបច្ចេកទេស (Indicators)">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 13l4-4 4 4 6-6 4 4M3 21h18M5 21v-4M9 21v-7M13 21v-5M17 21v-9M21 21v-6" />
+        </svg>
+        <span data-i18n="indicators">Indicators</span>
+        <span class="tv-badge-count" id="badge-active-indicators" style="display: none;">0</span>
+        <svg class="chevron" viewBox="0 0 10 6">
+          <path d="M1 1l4 4 4-4" />
+        </svg>
+      </button>
+
+      <!-- Multi-Chart Layout Dropdown (Select Layout: 1, 2, 4, 8 Charts) -->
+      <div class="tv-layout-dropdown-wrap" id="wrap-layout-dropdown">
+        <button class="tv-header-icon-btn" id="btn-select-layout" title="ជ្រើសរើសប្លង់ក្រាហ្វិក (Select Layout: 1, 2, 4, 8 Charts)" data-i18n-title="select_layout">
+          <svg viewBox="0 0 24 24" id="layout-btn-icon" width="18" height="18">
+            <rect x="3" y="3" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <rect x="13" y="3" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <rect x="3" y="13" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <rect x="13" y="13" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+          <svg class="chevron" viewBox="0 0 10 6" style="margin-left: 2px;">
+            <path d="M1 1l4 4 4-4" />
+          </svg>
+        </button>
+        <div class="tv-layout-dropdown-menu" id="layout-dropdown-menu" style="display: none;">
+          <div class="layout-menu-header">
+            <span>ជ្រើសរើសប្លង់ក្រាហ្វិក (LAYOUT)</span>
+            <span class="pro-badge">PRO MULTI-CHART</span>
+          </div>
+          <div class="layout-grid-options">
+            <!-- 1 Chart (Single) -->
+            <button class="layout-opt-btn active" data-layout="1" title="1 ក្រាហ្វ (Single Chart)">
+              <div class="layout-preview-box lp-1">
+                <div class="lp-cell"></div>
+              </div>
+              <span class="lp-title">1 ក្រាហ្វ (Single)</span>
+            </button>
+            <!-- 2 Charts Vertical (Side-by-side: Left 1H / Right 5m) -->
+            <button class="layout-opt-btn" data-layout="2v" title="ពុះជា ២ បញ្ឈរ (Left: 1H, Right: 5m)">
+              <div class="layout-preview-box lp-2v">
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+              </div>
+              <span class="lp-title">២ បញ្ឈរ (1H | 5m)</span>
+            </button>
+            <!-- 2 Charts Horizontal (Top / Bottom) -->
+            <button class="layout-opt-btn" data-layout="2h" title="ពុះជា ២ ផ្ដេក (Top / Bottom)">
+              <div class="layout-preview-box lp-2h">
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+              </div>
+              <span class="lp-title">២ ផ្ដេក (Top / Bottom)</span>
+            </button>
+            <!-- 4 Charts Grid (2x2: 1D, 4H, 1H, 5m) -->
+            <button class="layout-opt-btn" data-layout="4" title="ពុះជា ៤ ក្រាហ្វ (2x2 Grid: 1D, 4H, 1H, 5m)">
+              <div class="layout-preview-box lp-4">
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+              </div>
+              <span class="lp-title">៤ ក្រាហ្វ (2x2 Grid)</span>
+            </button>
+            <!-- 8 Charts Grid (4x2: 8 Charts) -->
+            <button class="layout-opt-btn" data-layout="8" title="ពុះជា ៨ ក្រាហ្វ (8 Charts Grid)">
+              <div class="layout-preview-box lp-8">
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+                <div class="lp-cell"></div>
+              </div>
+              <span class="lp-title">៨ ក្រាហ្វ (8 Charts)</span>
+            </button>
+          </div>
+          <div class="layout-menu-footer">
+            <label class="layout-sync-toggle" title="ធ្វើសមកាលកម្ម Crosshair និង Replay រវាងក្រាហ្វិកទាំងអស់">
+              <input type="checkbox" id="chk-sync-crosshair" checked>
+              <span>Sync Crosshair & Replay</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="tv-header-sep"></div>
+
+      <!-- Price Alert Button -->
+      <button class="tv-header-btn" id="btn-alert-modal" title="ការដាស់តឿន (Alert)">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="13" r="8" />
+          <path d="M12 9v4l2.5 2M5 3L2 6M19 3l3 3M19 13h4M21 11v4" />
+        </svg>
+        <span data-i18n="alert">Alert</span>
+      </button>
+
+      <!-- Bar Replay Simulation Button -->
+      <button class="tv-header-btn" id="btn-replay" title="ចាក់ឡើងវិញ (Replay)">
+        <svg viewBox="0 0 24 24">
+          <path d="M11 18l-7-6 7-6v12zm10 0l-7-6 7-6v12z" />
+        </svg>
+        <span data-i18n="replay">Replay</span>
+        <svg class="chevron" viewBox="0 0 10 6">
+          <path d="M1 1l4 4 4-4" />
+        </svg>
+      </button>
+
+      <!-- Undo / Redo -->
+      <button class="tv-header-icon-btn" id="btn-undo" title="មិនធ្វើវិញ (Undo)" data-i18n-title="undo">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 10h10a5 5 0 0 1 5 5v2M4 10l5-5M4 10l5 5" />
+        </svg>
+      </button>
+      <button class="tv-header-icon-btn" id="btn-redo" title="ធ្វើឡើងវិញ (Redo)" data-i18n-title="redo">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 10H10a5 5 0 0 0-5 5v2M20 10l-5-5M20 10l-5 5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="tv-header-right">
+      <!-- Language Switcher -->
+      <button class="tv-btn lang-toggle-btn" id="btn-lang-toggle" title="ប្តូរភាសា / Switch Language">
+        <span style="font-size: 13px;">🌐</span>
+        <span id="current-lang-label">🇰🇭 ខ្មែរ</span>
+      </button>
+
+      <!-- Chart Settings Button -->
+      <button class="tv-header-icon-btn" id="btn-chart-settings" title="Chart settings (Alt + S) / ការកំណត់ក្រាហ្វិក">
+        <svg viewBox="0 0 24 24">
+          <polygon points="12 2 21 7 21 17 12 22 3 17 3 7 12 2" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      </button>
+
+      <!-- Screenshot Export (TradingView Style Copy / Save) -->
+      <div class="tv-screenshot-dropdown-wrap" id="wrap-screenshot">
+        <button class="tv-header-icon-btn" id="btn-screenshot" title="ថតរូបក្រាហ្វិក / Screenshot (Copy or Save)"
+          data-i18n-title="screenshot">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+          </svg>
+        </button>
+        <div class="tv-screenshot-dropdown" id="screenshot-dropdown" style="display: none;">
+          <div class="screenshot-menu-item" id="btn-copy-chart-image">
+            <svg viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor"
+                stroke-width="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor"
+                stroke-width="2" />
+            </svg>
+            <div class="menu-item-text">
+              <span class="primary">ចម្លងរូបភាពក្រាហ្វ (Copy Image)</span>
+              <span class="secondary">Paste in Telegram, Discord, Facebook</span>
+            </div>
+            <span class="hotkey-badge">Ctrl+Shift+S</span>
+          </div>
+          <div class="screenshot-menu-item" id="btn-download-chart-image">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" fill="none" stroke="currentColor"
+                stroke-width="2" />
+            </svg>
+            <div class="menu-item-text">
+              <span class="primary">ទាញយករូបភាព PNG (Download)</span>
+              <span class="secondary">Save chart snapshot to computer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullscreen Toggle -->
+      <button class="tv-header-icon-btn" id="btn-fullscreen" title="ពេញអេក្រង់" data-i18n-title="fullscreen">
+        <svg viewBox="0 0 24 24">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
+
+      <!-- Live Connection Status -->
+      <div class="tv-connection-status" id="connection-pill">
+        <div class="pulse-dot"></div>
+        <span id="connection-label" data-i18n="live_feed">ផ្សាយបន្តផ្ទាល់ (Live Feed)</span>
+      </div>
+
+      <!-- Cloud & Local IndexedDB Sync Status Pill -->
+      <div class="tv-sync-pill" id="sync-status-pill" title="IndexedDB & Cloud Synchronization Status">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+        </svg>
+        <span id="sync-status-text">Cloud Synced</span>
+      </div>
+
+      <!-- User Account & Storage Profile Button -->
+      <button class="tv-header-btn tv-user-profile-btn" id="btn-user-profile-right" title="User Account & Storage (គណនី និងទិន្នន័យ)">
+        <div class="user-avatar-circle" id="user-avatar-circle">G</div>
+        <span id="user-profile-name">Guest Trader</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="tv-main-layout">
+
+    <!-- LEFT DRAWING TOOLBAR (90% Identical to TradingView Image) -->
+    <nav class="tv-toolbar-left" id="drawing-toolbar">
+      <!-- 1. Cursor / Crosshair -->
+      <div class="tv-tool-btn active" data-tool="cursor" title="ទស្សន៍ទ្រនិច Crosshair (Cursor)"
+        data-i18n-title="tool_cursor">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4v16M4 12h16" />
+        </svg>
+      </div>
+
+      <!-- 2. Lines Group (Photo 1) -->
+      <div class="tv-tool-btn tv-has-flyout" id="btn-group-lines" data-tool="trendline">
+        <span class="tv-tool-btn-icon" id="lines-current-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="5" cy="19" r="2.5" />
+            <circle cx="19" cy="5" r="2.5" />
+            <line x1="7" y1="17" x2="17" y2="7" />
+          </svg>
+        </span>
+        <span class="tv-flyout-arrow">›</span>
+        <div class="tv-tool-flyout" id="flyout-lines">
+          <div class="tv-flyout-header">LINES</div>
+          <!-- 1. Trendline -->
+          <div class="tv-flyout-item" data-tool="trendline">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <circle cx="5" cy="19" r="2.5" />
+                <circle cx="19" cy="5" r="2.5" />
+                <line x1="7" y1="17" x2="17" y2="7" />
+              </svg>
+              <span class="tool-name">Trendline</span>
+            </div>
+            <div class="flyout-item-right">
+              <span class="tool-shortcut">Alt + T</span>
+              <button class="tv-fav-star-btn" data-fav-tool="trendline" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 2. Ray -->
+          <div class="tv-flyout-item" data-tool="ray">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <circle cx="5" cy="19" r="2.5" />
+                <circle cx="13" cy="11" r="2" />
+                <line x1="7" y1="17" x2="21" y2="3" />
+              </svg>
+              <span class="tool-name">Ray</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="ray" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 3. Info line -->
+          <div class="tv-flyout-item" data-tool="info_line">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <circle cx="5" cy="19" r="2" />
+                <circle cx="19" cy="5" r="2" />
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <rect x="7" y="10" width="8" height="5" rx="2.5" fill="none" stroke="currentColor" />
+              </svg>
+              <span class="tool-name">Info line</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="info_line" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 4. Extended line -->
+          <div class="tv-flyout-item" data-tool="extended_line">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <circle cx="8" cy="16" r="2" />
+                <circle cx="16" cy="8" r="2" />
+                <line x1="2" y1="22" x2="22" y2="2" />
+              </svg>
+              <span class="tool-name">Extended line</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="extended_line" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 5. Trend angle -->
+          <div class="tv-flyout-item" data-tool="trend_angle">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="4" y1="19" x2="20" y2="19" />
+                <line x1="4" y1="19" x2="18" y2="5" />
+                <path d="M10 19a6 6 0 0 0-1-4" />
+                <circle cx="4" cy="19" r="2" />
+              </svg>
+              <span class="tool-name">Trend angle</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="trend_angle" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 6. Horizontal line -->
+          <div class="tv-flyout-item" data-tool="hline">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <circle cx="7" cy="12" r="2" />
+                <circle cx="17" cy="12" r="2" />
+              </svg>
+              <span class="tool-name">Horizontal line</span>
+            </div>
+            <div class="flyout-item-right">
+              <span class="tool-shortcut">Alt + H</span>
+              <button class="tv-fav-star-btn" data-fav-tool="hline" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 7. Horizontal ray -->
+          <div class="tv-flyout-item" data-tool="hray">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <circle cx="5" cy="12" r="2" />
+                <line x1="7" y1="12" x2="22" y2="12" />
+              </svg>
+              <span class="tool-name">Horizontal ray</span>
+            </div>
+            <div class="flyout-item-right">
+              <span class="tool-shortcut">Alt + J</span>
+              <button class="tv-fav-star-btn" data-fav-tool="hray" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 8. Vertical line -->
+          <div class="tv-flyout-item" data-tool="vline">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="2" x2="12" y2="22" />
+                <circle cx="12" cy="7" r="2" />
+                <circle cx="12" cy="17" r="2" />
+              </svg>
+              <span class="tool-name">Vertical line</span>
+            </div>
+            <div class="flyout-item-right">
+              <span class="tool-shortcut">Alt + V</span>
+              <button class="tv-fav-star-btn" data-fav-tool="vline" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 9. Crossline -->
+          <div class="tv-flyout-item" data-tool="crossline">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="2" x2="12" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <circle cx="12" cy="12" r="2.5" />
+              </svg>
+              <span class="tool-name">Crossline</span>
+            </div>
+            <div class="flyout-item-right">
+              <span class="tool-shortcut">Alt + C</span>
+              <button class="tv-fav-star-btn" data-fav-tool="crossline" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Fibonacci & Gann Group (Photo 2) -->
+      <div class="tv-tool-btn tv-has-flyout" id="btn-group-fib" data-tool="fib">
+        <span class="tv-tool-btn-icon" id="fib-current-icon">
+          <svg viewBox="0 0 24 24">
+            <line x1="3" y1="7" x2="21" y2="7" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="17" x2="21" y2="17" />
+            <circle cx="5" cy="7" r="1.5" />
+            <circle cx="19" cy="12" r="1.5" />
+            <circle cx="5" cy="17" r="1.5" />
+          </svg>
+        </span>
+        <span class="tv-flyout-arrow">›</span>
+        <div class="tv-tool-flyout" id="flyout-fib">
+          <div class="tv-flyout-header">FIBONACCI</div>
+
+          <!-- 1. Fib retracement -->
+          <div class="tv-flyout-item" data-tool="fib">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="3" y1="7" x2="21" y2="7" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="17" x2="21" y2="17" />
+                <circle cx="5" cy="7" r="1.5" />
+                <circle cx="19" cy="12" r="1.5" />
+                <circle cx="5" cy="17" r="1.5" />
+              </svg>
+              <span class="tool-name">Fib retracement</span>
+            </div>
+            <div class="flyout-item-right">
+              <span class="tool-shortcut">Alt + F</span>
+              <button class="tv-fav-star-btn" data-fav-tool="fib" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Trend-based fib extension -->
+          <div class="tv-flyout-item" data-tool="fib_ext">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <polyline points="3,17 9,7 15,13" />
+                <line x1="15" y1="7" x2="21" y2="7" />
+                <line x1="15" y1="11" x2="21" y2="11" />
+                <line x1="15" y1="15" x2="21" y2="15" />
+              </svg>
+              <span class="tool-name">Trend-based fib extension</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_ext" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Fib channel -->
+          <div class="tv-flyout-item" data-tool="fib_channel">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="4" y1="18" x2="18" y2="4" />
+                <line x1="7" y1="21" x2="21" y2="7" />
+                <line x1="2" y1="15" x2="15" y2="2" />
+                <circle cx="4" cy="18" r="1.5" />
+                <circle cx="18" cy="4" r="1.5" />
+              </svg>
+              <span class="tool-name">Fib channel</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_channel" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Fib time zone -->
+          <div class="tv-flyout-item" data-tool="fib_time">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="4" y1="4" x2="4" y2="20" />
+                <line x1="8" y1="4" x2="8" y2="20" />
+                <line x1="13" y1="4" x2="13" y2="20" />
+                <line x1="20" y1="4" x2="20" y2="20" />
+                <circle cx="4" cy="8" r="1.2" />
+                <circle cx="8" cy="14" r="1.2" />
+              </svg>
+              <span class="tool-name">Fib time zone</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_time" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 5. Fib speed resistance fan -->
+          <div class="tv-flyout-item" data-tool="fib_fan">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="4" y1="20" x2="20" y2="4" />
+                <line x1="4" y1="20" x2="20" y2="10" />
+                <line x1="4" y1="20" x2="20" y2="16" />
+                <line x1="4" y1="20" x2="20" y2="20" />
+                <circle cx="4" cy="20" r="1.5" />
+                <circle cx="20" cy="4" r="1.5" />
+              </svg>
+              <span class="tool-name">Fib speed resistance fan</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_fan" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 6. Trend-based fib time -->
+          <div class="tv-flyout-item" data-tool="fib_trend_time">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <polyline points="3,18 8,6 13,12" />
+                <line x1="8" y1="3" x2="8" y2="21" />
+                <line x1="13" y1="3" x2="13" y2="21" />
+                <line x1="18" y1="3" x2="18" y2="21" />
+              </svg>
+              <span class="tool-name">Trend-based fib time</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_trend_time" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 7. Fib circles -->
+          <div class="tv-flyout-item" data-tool="fib_circles">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+              <span class="tool-name">Fib circles</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_circles" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 8. Fib spiral -->
+          <div class="tv-flyout-item" data-tool="fib_spiral">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 12a2 2 0 0 1 2 2 4 4 0 0 1-4 4 6 6 0 0 1-6-6 8 8 0 0 1 8-8 10 10 0 0 1 10 10" />
+              </svg>
+              <span class="tool-name">Fib spiral</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_spiral" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 9. Fib speed resistance arcs -->
+          <div class="tv-flyout-item" data-tool="fib_arcs">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 20a16 16 0 0 1 16-16" />
+                <path d="M4 20a11 11 0 0 1 11-11" />
+                <path d="M4 20a7 7 0 0 1 7-7" />
+                <line x1="4" y1="20" x2="20" y2="4" />
+              </svg>
+              <span class="tool-name">Fib speed resistance arcs</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_arcs" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 10. Fib wedge -->
+          <div class="tv-flyout-item" data-tool="fib_wedge">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="3" y1="20" x2="21" y2="4" />
+                <line x1="3" y1="20" x2="21" y2="10" />
+                <line x1="3" y1="20" x2="21" y2="16" />
+                <path d="M14 16a8 8 0 0 0 4-4" />
+              </svg>
+              <span class="tool-name">Fib wedge</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="fib_wedge" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 11. Pitchfan -->
+          <div class="tv-flyout-item" data-tool="pitchfan">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="4" y1="12" x2="20" y2="4" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="12" x2="20" y2="20" />
+                <line x1="4" y1="8" x2="4" y2="16" />
+              </svg>
+              <span class="tool-name">Pitchfan</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="pitchfan" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="tv-flyout-divider"></div>
+          <div class="tv-flyout-header">GANN</div>
+
+          <!-- 12. Gann box -->
+          <div class="tv-flyout-item" data-tool="gann_box">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" />
+                <line x1="4" y1="4" x2="20" y2="20" />
+                <line x1="4" y1="20" x2="20" y2="4" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="12" y1="4" x2="12" y2="20" />
+                <circle cx="4" cy="4" r="1.5" />
+                <circle cx="20" cy="20" r="1.5" />
+              </svg>
+              <span class="tool-name">Gann box</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="gann_box" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 13. Gann square fixed -->
+          <div class="tv-flyout-item" data-tool="gann_sq_fixed">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" />
+                <line x1="4" y1="4" x2="20" y2="20" />
+                <line x1="4" y1="20" x2="20" y2="4" />
+                <circle cx="12" cy="12" r="1.5" />
+              </svg>
+              <span class="tool-name">Gann square fixed</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="gann_sq_fixed" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 14. Gann square -->
+          <div class="tv-flyout-item" data-tool="gann_square">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" />
+                <line x1="4" y1="12" x2="12" y2="4" />
+                <line x1="12" y1="4" x2="20" y2="12" />
+                <line x1="20" y1="12" x2="12" y2="20" />
+                <line x1="12" y1="20" x2="4" y2="12" />
+                <circle cx="4" cy="20" r="1.5" />
+              </svg>
+              <span class="tool-name">Gann square</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="gann_square" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 15. Gann fan -->
+          <div class="tv-flyout-item" data-tool="gann_fan">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <line x1="4" y1="20" x2="20" y2="4" />
+                <line x1="4" y1="20" x2="20" y2="8" />
+                <line x1="4" y1="20" x2="20" y2="12" />
+                <line x1="4" y1="20" x2="20" y2="16" />
+                <line x1="4" y1="20" x2="16" y2="4" />
+                <line x1="4" y1="20" x2="12" y2="4" />
+                <line x1="4" y1="20" x2="8" y2="4" />
+              </svg>
+              <span class="tool-name">Gann fan</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="gann_fan" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Patterns / XABCD / Harmonic pattern -->
+      <div class="tv-tool-btn" data-tool="patterns" title="ទម្រង់លំនាំ SMC & Harmonic (Patterns)"
+        data-i18n-title="tool_patterns">
+        <svg viewBox="0 0 24 24">
+          <polyline points="4,19 12,6 20,19 12,14 4,19" />
+          <circle cx="4" cy="19" r="2" />
+          <circle cx="12" cy="6" r="2" />
+          <circle cx="20" cy="19" r="2" />
+          <circle cx="12" cy="14" r="2" />
+        </svg>
+      </div>
+
+      <!-- 5. Prediction & Measurement / Risk:Reward (Long/Short Position) -->
+      <div class="tv-tool-btn tv-has-flyout" id="btn-group-prediction" data-tool="long_pos">
+        <span class="tv-tool-btn-icon" id="prediction-current-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="4" y="4" width="16" height="7" fill="#089981" rx="1.5" />
+            <rect x="4" y="13" width="16" height="7" fill="#f23645" rx="1.5" />
+            <line x1="3" y1="12" x2="21" y2="12" stroke="#ffffff" stroke-width="1.6" />
+          </svg>
+        </span>
+        <span class="tv-flyout-arrow">›</span>
+        <div class="tv-tool-flyout" id="flyout-prediction">
+          <div class="tv-flyout-header">PREDICTION & MEASUREMENT</div>
+          <!-- 1. Long position -->
+          <div class="tv-flyout-item active" data-tool="long_pos">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="7" fill="#089981" rx="1.5" />
+                <rect x="4" y="13" width="16" height="7" fill="#f23645" rx="1.5" />
+                <line x1="3" y1="12" x2="21" y2="12" stroke="#ffffff" stroke-width="1.6" />
+              </svg>
+              <span class="tool-name">Long Position (Buy)</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="long_pos" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 2. Short position -->
+          <div class="tv-flyout-item" data-tool="short_pos">
+            <div class="flyout-item-left">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="7" fill="#f23645" rx="1.5" />
+                <rect x="4" y="13" width="16" height="7" fill="#089981" rx="1.5" />
+                <line x1="3" y1="12" x2="21" y2="12" stroke="#ffffff" stroke-width="1.6" />
+              </svg>
+              <span class="tool-name">Short Position (Sell)</span>
+            </div>
+            <div class="flyout-item-right">
+              <button class="tv-fav-star-btn" data-fav-tool="short_pos" title="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Geometric Shapes / Rectangle with 4 corner circles -->
+      <div class="tv-tool-btn" data-tool="rectangle" title="ប្រអប់តំបន់ស្ថាប័ន SMC Order Block (Rectangle Box)"
+        data-i18n-title="tool_box">
+        <svg viewBox="0 0 24 24">
+          <rect x="5" y="5" width="14" height="14" rx="1" />
+          <circle cx="5" cy="5" r="2" />
+          <circle cx="19" cy="5" r="2" />
+          <circle cx="5" cy="19" r="2" />
+          <circle cx="19" cy="19" r="2" />
+        </svg>
+      </div>
+
+      <!-- 7. Text Annotation (Serif capital T) -->
+      <div class="tv-tool-btn" data-tool="text" title="កំណត់ចំណាំអត្ថបទ (Text Annotation)" data-i18n-title="tool_text">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6V4h16v2h-1v1H13v12h2.5v2h-7v-2H11V7H5V6H4z" fill="currentColor" stroke="none" />
+        </svg>
+      </div>
+
+      <!-- 8. Stickers / Icons (Circle with smiling face) -->
+      <div class="tv-tool-btn" data-tool="stickers" title="រូបសញ្ញា & សញ្ញាសម្គាល់ (Icons & Stickers)"
+        data-i18n-title="tool_stickers">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <circle cx="9" cy="10" r="1.2" fill="currentColor" />
+          <circle cx="15" cy="10" r="1.2" fill="currentColor" />
+          <path d="M8 14.5c1.2 1.8 2.8 2.5 4 2.5s2.8-.7 4-2.5" />
+        </svg>
+      </div>
+
+      <div class="tv-tool-divider"></div>
+
+      <!-- 9. Measure / Ruler (Diagonal ruler with tick marks) -->
+      <div class="tv-tool-btn" data-tool="measure" id="btn-tool-measure" title="វាស់ទំហំ និងចម្ងាយ (Measure Tool)"
+        data-i18n-title="tool_measure">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 18L18 6l2 2-12 12zM8.5 15.5l1.5-1.5M11.5 12.5l2-2M14.5 9.5l1.5-1.5" />
+        </svg>
+      </div>
+
+      <!-- 10. Zoom In / Magnifier -->
+      <div class="tv-tool-btn" data-tool="zoom" id="btn-tool-zoom" title="ពង្រីកក្រាហ្វិក (Zoom In)"
+        data-i18n-title="tool_zoom">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16" y2="16" />
+          <line x1="11" y1="8" x2="11" y2="14" />
+          <line x1="8" y1="11" x2="14" y2="11" />
+        </svg>
+      </div>
+
+      <div class="tv-tool-divider"></div>
+
+      <!-- 11. Magnet Mode (U magnet) -->
+      <div class="tv-tool-btn" id="btn-magnet" title="ទាញស្អិតតាមចុងទៀន Magnet (Snap to OHLC)"
+        data-i18n-title="tool_magnet">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 4v7a6 6 0 0 0 12 0V4M6 8h4M14 8h4" />
+        </svg>
+      </div>
+
+      <!-- 12. Stay in Drawing Mode (Pencil with lock) -->
+      <div class="tv-tool-btn" id="btn-stay-draw" title="រក្សាគំនូរបន្តបន្ទាប់ (Stay in Drawing Mode)"
+        data-i18n-title="tool_stay_draw">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4l5 5L7 19H2v-5L12 4z" />
+          <rect x="15" y="14" width="7" height="6" rx="1" />
+          <path d="M17 14v-2a1.5 1.5 0 0 1 3 0v2" />
+        </svg>
+      </div>
+
+      <!-- 13. Lock All Drawings (Padlock) -->
+      <div class="tv-tool-btn" id="btn-lock" title="ចាក់សោគំនូរទាំងអស់ (Lock All Drawings)" data-i18n-title="tool_lock">
+        <svg viewBox="0 0 24 24">
+          <rect x="6" y="10" width="12" height="10" rx="2" />
+          <path d="M9 10V6a3 3 0 0 1 6 0v4" />
+        </svg>
+      </div>
+
+      <!-- 14. Hide All Drawings (Eye with slash) -->
+      <div class="tv-tool-btn" id="btn-hide" title="លាក់/បង្ហាញគំនូរ (Hide All Drawings)" data-i18n-title="tool_hide">
+        <svg viewBox="0 0 24 24">
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+          <circle cx="12" cy="12" r="3" />
+          <line x1="17" y1="16" x2="21" y2="20" />
+        </svg>
+      </div>
+
+      <!-- 15. Sync in Layout (Chain link) -->
+      <div class="tv-tool-btn" id="btn-sync-draw" title="ធ្វើសមកាលកម្មគំនូរ (Sync in Layout)"
+        data-i18n-title="tool_sync">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </svg>
+      </div>
+
+      <div class="tv-tool-divider"></div>
+
+      <!-- 16. Clear / Trash (Trash can) -->
+      <div class="tv-tool-btn" id="btn-clear-drawings" title="លុបគំនូរទាំងអស់ (Remove All Drawings)"
+        data-i18n-title="tool_clear">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 7h14M9 7V4h6v3M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" />
+        </svg>
+      </div>
+    </nav>
+
+    <!-- CENTER CHART & DOCK -->
+    <main class="tv-center-content">
+      <!-- CHART VIEWPORT -->
+      <div class="tv-chart-viewport" id="chart-viewport">
+        <div id="chart-container" class="layout-1">
+          <!-- Primary Pane 0 (Default Active) -->
+          <div class="tv-chart-pane is-active" id="chart-pane-0" data-pane-idx="0">
+            <div class="tv-pane-toolbar" id="pane-toolbar-0">
+              <span class="tv-pane-num">1</span>
+              <span class="tv-pane-sym" id="pane-sym-0">XAUUSD</span>
+              <span class="tv-pane-dot">•</span>
+              <button class="tv-pane-tf-btn" id="pane-tf-btn-0" title="ប្តូរ Timeframe (Click to cycle)">1h</button>
+              <button class="tv-pane-max-btn" id="pane-max-btn-0" title="Maximize/Restore">
+                <svg viewBox="0 0 24 24" width="12" height="12"><path d="M15 3h6v6m0-6l-7 7M9 21H3v-6m0 6l7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
+            </div>
+            <div class="tv-watermark" id="chart-watermark">XAUUSD</div>
+            <div class="tv-pane-legend" id="pane-legend-0"></div>
+            <div class="tv-pane-chart" id="chart-pane-0-canvas"></div>
+          </div>
+        </div>
+        <div class="tv-price-countdown-badge" id="tv-price-countdown">
+          <span class="countdown-price" id="countdown-price-val">4183.40</span>
+          <span class="countdown-timer" id="countdown-timer-val">01:22</span>
+        </div>
+
+        <!-- Floating Action Toolbar for Selected Drawing (TradingView Style) -->
+        <div class="tv-drawing-actions-popup" id="tv-drawing-actions" style="display: none;">
+          <span class="tv-drawing-drag-grip" id="drawing-action-grip" title="Move toolbar">⋮⋮</span>
+          <span class="drawing-type-badge" id="tv-drawing-type-label">Trendline</span>
+          <div class="tv-action-divider"></div>
+
+          <!-- Color Picker Button -->
+          <div class="tv-action-dropdown-wrap" id="wrap-draw-color">
+            <button class="tv-drawing-action-btn color-btn" id="btn-draw-color" title="Color / ពណ៌">
+              <span class="color-preview" id="draw-color-preview" style="background-color: #2962ff;"></span>
+            </button>
+            <div class="tv-action-popover" id="draw-color-palette" style="display: none;">
+              <div class="tv-palette-grid">
+                <span class="color-dot" data-color="#2962ff" style="background: #2962ff;"></span>
+                <span class="color-dot" data-color="#089981" style="background: #089981;"></span>
+                <span class="color-dot" data-color="#f23645" style="background: #f23645;"></span>
+                <span class="color-dot" data-color="#ff9800" style="background: #ff9800;"></span>
+                <span class="color-dot" data-color="#fbc02d" style="background: #fbc02d;"></span>
+                <span class="color-dot" data-color="#ab47bc" style="background: #ab47bc;"></span>
+                <span class="color-dot" data-color="#00bcd4" style="background: #00bcd4;"></span>
+                <span class="color-dot" data-color="#ffffff" style="background: #ffffff;"></span>
+                <span class="color-dot" data-color="#787b86" style="background: #787b86;"></span>
+                <span class="color-dot" data-color="#131722"
+                  style="background: #131722; border: 1px solid #363a45;"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Line Thickness -->
+          <div class="tv-action-dropdown-wrap" id="wrap-draw-width">
+            <button class="tv-drawing-action-btn width-btn" id="btn-draw-width" title="Line Thickness / កម្រាស់បន្ទាត់">
+              <span class="width-preview" id="draw-width-preview" style="height: 2px;"></span>
+              <svg viewBox="0 0 10 6" class="chevron">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" />
+              </svg>
+            </button>
+            <div class="tv-action-popover" id="draw-width-menu" style="display: none;">
+              <div class="popover-item" data-width="1"><span class="line-sample" style="height: 1px;"></span> 1px</div>
+              <div class="popover-item" data-width="2"><span class="line-sample" style="height: 2px;"></span> 2px</div>
+              <div class="popover-item" data-width="3"><span class="line-sample" style="height: 3px;"></span> 3px</div>
+              <div class="popover-item" data-width="4"><span class="line-sample" style="height: 4px;"></span> 4px</div>
+            </div>
+          </div>
+
+          <!-- Line Style (Solid, Dashed, Dotted) -->
+          <div class="tv-action-dropdown-wrap" id="wrap-draw-style">
+            <button class="tv-drawing-action-btn style-btn" id="btn-draw-style" title="Line Style / ទម្រង់បន្ទាត់">
+              <span class="style-icon" id="draw-style-preview">——</span>
+              <svg viewBox="0 0 10 6" class="chevron">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" />
+              </svg>
+            </button>
+            <div class="tv-action-popover" id="draw-style-menu" style="display: none;">
+              <div class="popover-item" data-style="solid">—— Solid</div>
+              <div class="popover-item" data-style="dashed">- - Dashed</div>
+              <div class="popover-item" data-style="dotted">··· Dotted</div>
+            </div>
+          </div>
+
+          <div class="tv-action-divider"></div>
+
+          <!-- Settings Cog (⚙) -->
+          <button class="tv-drawing-action-btn settings-btn" id="btn-draw-settings"
+            title="Settings / ការកំណត់ (Double-click drawing)">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+                fill="currentColor" />
+            </svg>
+          </button>
+
+          <!-- Lock / Unlock Drawing -->
+          <button class="tv-drawing-action-btn lock-btn" id="btn-draw-lock" title="Lock / Unlock Drawing">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                fill="currentColor" />
+            </svg>
+          </button>
+
+          <!-- Duplicate / Clone Drawing (Ctrl+D) -->
+          <button class="tv-drawing-action-btn clone-btn" id="btn-draw-clone"
+            title="Duplicate Drawing / បង្កើតចម្លង (Ctrl+D)">
+            <svg viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor"
+                stroke-width="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor"
+                stroke-width="2" />
+            </svg>
+          </button>
+
+          <!-- Delete Drawing -->
+          <button class="tv-drawing-action-btn delete" id="btn-delete-drawing" title="Delete Drawing (Del / Backspace)">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+
+          <button class="tv-drawing-action-btn delete-all" id="btn-delete-all-drawings"
+            title="Clear All Drawings On Chart (លុបទាំងអស់)">
+            <span id="btn-delete-all-label">Clear All</span>
+          </button>
+        </div>
+
+        <!-- Floating Favorite Drawings Toolbar (TradingView Pro - Photo 2 & 3) -->
+        <div class="tv-fav-toolbar" id="tv-fav-toolbar" style="display: none;">
+          <!-- 6-Dots Drag Handle (Photo 3) -->
+          <div class="tv-fav-drag-handle" id="fav-drag-handle" title="Drag to move anywhere (ចុចអូសដើម្បីផ្លាស់ទី)">
+            <svg viewBox="0 0 10 16" width="10" height="16">
+              <circle cx="3" cy="3" r="1.3" fill="currentColor" />
+              <circle cx="7" cy="3" r="1.3" fill="currentColor" />
+              <circle cx="3" cy="8" r="1.3" fill="currentColor" />
+              <circle cx="7" cy="8" r="1.3" fill="currentColor" />
+              <circle cx="3" cy="13" r="1.3" fill="currentColor" />
+              <circle cx="7" cy="13" r="1.3" fill="currentColor" />
+            </svg>
+          </div>
+          <div class="tv-fav-divider"></div>
+          <!-- Dynamic Favorite Tool Buttons (Photo 2) -->
+          <div class="tv-fav-items" id="fav-items-container">
+            <!-- Dynamically populated by setupFavoritesEngine -->
+          </div>
+        </div>
+
+        <!-- Floating Legend -->
+        <div class="tv-chart-legend" id="chart-legend">
+          <div class="tv-legend-main">
+            <span class="tv-legend-title" id="legend-symbol">BTC/USDT</span>
+            <span class="tv-legend-tf" id="legend-tf">5m</span>
+            <span style="color: var(--tv-text-secondary); font-size: 11px;" id="legend-exchange">BINANCE</span>
+          </div>
+          <div class="tv-legend-ohlc" id="legend-ohlc">
+            <span><span data-i18n="legend_open">បើក (O):</span> <span class="val" id="legend-open">-</span></span>
+            <span><span data-i18n="legend_high">ខ្ពស់ (H):</span> <span class="val" id="legend-high">-</span></span>
+            <span><span data-i18n="legend_low">ទាប (L):</span> <span class="val" id="legend-low">-</span></span>
+            <span><span data-i18n="legend_close">បិទ (C):</span> <span class="val" id="legend-close">-</span></span>
+            <span><span data-i18n="legend_chg">ប្រែប្រួល (Chg):</span> <span class="val" id="legend-chg">-</span></span>
+            <span><span data-i18n="legend_vol">បរិមាណ (Vol):</span> <span class="val" id="legend-vol">-</span></span>
+          </div>
+          <div class="tv-legend-indicators" id="legend-indicators">
+            <div class="tv-legend-ind-row" id="legend-row-ema20" style="display: none; color: #2962ff;">
+              <span class="ind-title" data-i18n="legend_ema20">EMA (20, close):</span>
+              <span class="ind-val" id="leg-ema20">-</span>
+              <button class="tv-legend-btn del-btn" title="Delete Indicator / លុបសូចនាករ"
+                data-del-ind="ema20">✕</button>
+            </div>
+            <div class="tv-legend-ind-row" id="legend-row-ema50" style="display: none; color: #ff9800;">
+              <span class="ind-title" data-i18n="legend_ema50">EMA (50, close):</span>
+              <span class="ind-val" id="leg-ema50">-</span>
+              <button class="tv-legend-btn del-btn" title="Delete Indicator / លុបសូចនាករ"
+                data-del-ind="ema50">✕</button>
+            </div>
+            <div class="tv-legend-ind-row" id="legend-row-ob" style="display: none; color: #ab47bc;">
+              <span class="ind-title" data-i18n="legend_ob">តំបន់ ICT Order Blocks:</span>
+              <span class="ind-val" id="leg-obs" data-i18n="active">សកម្ម</span>
+              <button class="tv-legend-btn del-btn" title="Delete Indicator / លុបសូចនាករ" data-del-ind="ob">✕</button>
+            </div>
+            <div class="tv-legend-ind-row" id="legend-row-fvg" style="display: none; color: #089981;">
+              <span class="ind-title" data-i18n="legend_fvg">គម្លាត ICT Fair Value Gaps:</span>
+              <span class="ind-val" id="leg-fvgs" data-i18n="tracking">កំពុងតាមដាន</span>
+              <button class="tv-legend-btn del-btn" title="Delete Indicator / លុបសូចនាករ" data-del-ind="fvg">✕</button>
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- Floating TradingView Pro Bar Replay Controller -->
+        <div class="tv-replay-toolbar" id="tv-replay-bar" style="display: none;">
+          <!-- Starting Point Dropdown Trigger -->
+          <div class="tv-replay-start-group" id="replay-start-group">
+            <button class="tv-replay-btn start-mode-btn" id="btn-replay-start-mode"
+              title="Jump to bar on chart (ចុចត្រង់ទៀនណាមួយលើក្រាហ្វដើម្បីកាត់ Replay)">
+              <span class="mode-icon" id="replay-mode-icon">
+                <svg viewBox="0 0 24 24">
+                  <line x1="5" y1="4" x2="5" y2="20" stroke-width="2.5" />
+                  <path d="M19 12H8M12 8l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2" />
+                </svg>
+              </span>
+              <span class="mode-label" id="replay-mode-label">Jump to bar</span>
+            </button>
+            <button class="tv-replay-btn chevron-btn" id="btn-replay-start-chevron" title="Starting point options">
+              <svg viewBox="0 0 10 6">
+                <path d="M1 5l4-4 4 4" />
+              </svg>
+            </button>
+
+            <!-- Popup 1: SELECT STARTING POINT -->
+            <div class="tv-replay-popup" id="popup-starting-point" style="display: none;">
+              <div class="tv-replay-popup-header">SELECT STARTING POINT</div>
+              <div class="tv-replay-popup-item active" data-start-mode="bar">
+                <div class="item-left">
+                  <svg viewBox="0 0 24 24">
+                    <line x1="5" y1="4" x2="5" y2="20" stroke-width="2.5" />
+                    <path d="M19 12H8M12 8l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="2" />
+                  </svg>
+                  <span>Select bar on chart (Jump to bar)</span>
+                </div>
+              </div>
+              <div class="tv-replay-popup-item" data-start-mode="date">
+                <div class="item-left">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="3" />
+                    <line x1="3" y1="9" x2="21" y2="9" />
+                    <line x1="8" y1="2" x2="8" y2="5" />
+                    <line x1="16" y1="2" x2="16" y2="5" />
+                    <path d="M14 14H9M11 12l-2 2 2 2" />
+                  </svg>
+                  <span>Date...</span>
+                </div>
+              </div>
+              <div class="tv-replay-popup-item" data-start-mode="first">
+                <div class="item-left">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="5" cy="19" r="2" />
+                    <line x1="5" y1="4" x2="5" y2="17" />
+                    <path d="M5 4h12l-3 4 3 4H5" />
+                    <line x1="3" y1="19" x2="21" y2="19" />
+                  </svg>
+                  <span>First available date</span>
+                </div>
+              </div>
+              <div class="tv-replay-popup-item" data-start-mode="random">
+                <div class="item-left">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="4" />
+                    <circle cx="8" cy="8" r="1.5" />
+                    <circle cx="16" cy="8" r="1.5" />
+                    <circle cx="12" cy="12" r="1.5" />
+                    <circle cx="8" cy="16" r="1.5" />
+                    <circle cx="16" cy="16" r="1.5" />
+                    <path d="M19 2l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="currentColor" />
+                  </svg>
+                  <span>Random bar</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tv-replay-sep"></div>
+
+          <!-- Play / Pause Button -->
+          <button class="tv-replay-btn icon-only" id="btn-replay-play" title="Play (Space)">
+            <svg viewBox="0 0 24 24" id="replay-play-icon">
+              <polygon points="6,4 20,12 6,20" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+
+          <!-- Step Forward 1 Bar Button -->
+          <button class="tv-replay-btn icon-only" id="btn-replay-step" title="Forward 1 bar (Right Arrow)">
+            <svg viewBox="0 0 24 24">
+              <polygon points="5,4 15,12 5,20" fill="none" stroke="currentColor" stroke-width="2" />
+              <line x1="18" y1="4" x2="18" y2="20" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+
+          <!-- Speed Selector Trigger -->
+          <div class="tv-replay-speed-group" id="replay-speed-group">
+            <button class="tv-replay-btn speed-btn" id="btn-replay-speed" title="Replay Speed (ល្បឿនចាក់ឡើងវិញ)">
+              <span id="replay-speed-val">10x</span>
+            </button>
+
+            <!-- Popup 2: REPLAY SPEED -->
+            <div class="tv-replay-popup speed-popup" id="popup-replay-speed" style="display: none;">
+              <div class="tv-replay-popup-header">REPLAY SPEED</div>
+              <div class="tv-replay-popup-item active" data-speed="10" data-interval="100">
+                <span class="speed-mult">10x</span>
+                <span class="speed-desc">10 upd per 1 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="7" data-interval="143">
+                <span class="speed-mult">7x</span>
+                <span class="speed-desc">7 upd per 1 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="5" data-interval="200">
+                <span class="speed-mult">5x</span>
+                <span class="speed-desc">5 upd per 1 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="3" data-interval="333">
+                <span class="speed-mult">3x</span>
+                <span class="speed-desc">3 upd per 1 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="1" data-interval="1000">
+                <span class="speed-mult">1x</span>
+                <span class="speed-desc">1 upd per 1 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="0.5" data-interval="2000">
+                <span class="speed-mult">0.5x</span>
+                <span class="speed-desc">1 upd per 2 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="0.3" data-interval="3000">
+                <span class="speed-mult">0.3x</span>
+                <span class="speed-desc">1 upd per 3 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="0.2" data-interval="5000">
+                <span class="speed-mult">0.2x</span>
+                <span class="speed-desc">1 upd per 5 sec</span>
+              </div>
+              <div class="tv-replay-popup-item" data-speed="0.1" data-interval="10000">
+                <span class="speed-mult">0.1x</span>
+                <span class="speed-desc">1 upd per 10 sec</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeframe badge -->
+          <span class="tv-replay-tf-badge" id="replay-tf-badge">5m</span>
+
+          <div class="tv-replay-sep"></div>
+
+          <!-- Jump to Real-Time -->
+          <button class="tv-replay-btn icon-only" id="btn-replay-jump-realtime"
+            title="Jump to Real-Time (ទៅកាន់បច្ចុប្បន្ន)">
+            <svg viewBox="0 0 24 24">
+              <polygon points="4,4 11,12 4,20" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <polygon points="11,4 18,12 11,20" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <line x1="20" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+
+          <!-- Close Replay Button -->
+          <button class="tv-replay-btn icon-only close-btn" id="btn-replay-close" title="Exit Replay Mode (ចាកចេញ)">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" />
+              <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+
+    </main>
+
+    <!-- RIGHT SIDEBAR (Hidden - Chart is full width) -->
+    <aside class="tv-sidebar-right" id="sidebar-right" style="display: none !important;">
+      <!-- Vertical Tab Bar -->
+      <nav class="tv-sidebar-tabs-vertical">
+        <button class="tv-sidebar-tab-btn active" data-panel="panel-watchlist" title="បញ្ជីតាមដានផ្សារ (Watchlist)"
+          data-i18n-title="tab_watchlist">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+          </svg>
+        </button>
+        <button class="tv-sidebar-tab-btn" data-panel="panel-orderbook" title="សៀវភៅបញ្ជាទិញ-លក់ (Order Book)"
+          data-i18n-title="tab_orderbook">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16M7 3v18M17 3v18" />
+          </svg>
+        </button>
+        <button class="tv-sidebar-tab-btn" data-panel="panel-trades" title="កិច្ចព្រមព្រៀងជាក់ស្តែង (Time & Sales)"
+          data-i18n-title="tab_timesales">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+          </svg>
+        </button>
+        <button class="tv-sidebar-tab-btn" data-panel="panel-paper" title="ជួញដូរសាកល្បង (Paper Trading)"
+          data-i18n-title="tab_paper">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M6 8h12M6 12h8M6 16h5" />
+          </svg>
+        </button>
+        <button class="tv-sidebar-tab-btn" data-panel="panel-sessions" title="វគ្គទីផ្សារ & Killzones (Sessions)"
+          data-i18n-title="tab_sessions">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+        </button>
+        <button class="tv-sidebar-tab-btn" data-panel="panel-technical" title="រង្វាស់បច្ចេកទេស (Technical Gauge)"
+          data-i18n-title="tab_gauge">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+          </svg>
+        </button>
+      </nav>
+
+      <!-- Sidebar Content View -->
+      <div class="tv-sidebar-main">
+        <!-- 1. Watchlist -->
+        <div class="tv-sidebar-panel active" id="panel-watchlist">
+          <div class="tv-panel-header">
+            <span data-i18n="tab_watchlist">បញ្ជីតាមដានផ្សារ</span>
+            <span style="font-size: 11px; color: var(--tv-text-secondary);" id="wl-total-count">18 Symbols</span>
+          </div>
+          <div class="tv-watchlist-search">
+            <input type="text" class="tv-search-input" id="input-search-watchlist" placeholder="ស្វែងរកគូក្នុងបញ្ជី..."
+              data-i18n-placeholder="filter_watchlist">
+          </div>
+          <div class="tv-watchlist-categories">
+            <button class="tv-cat-chip active" data-cat="all" data-i18n="cat_all">ទាំងអស់</button>
+            <button class="tv-cat-chip" data-cat="crypto" data-i18n="cat_crypto">គ្រីបតូ</button>
+            <button class="tv-cat-chip" data-cat="forex" data-i18n="cat_forex">រូបិយប័ណ្ណ & មាស</button>
+            <button class="tv-cat-chip" data-cat="indices" data-i18n="cat_indices">សន្ទស្សន៍</button>
+            <button class="tv-cat-chip" data-cat="stocks" data-i18n="cat_stocks">ភាគហ៊ុន</button>
+          </div>
+          <div class="tv-watchlist-list" id="watchlist-items-container"></div>
+        </div>
+
+        <!-- 2. Order Book -->
+        <div class="tv-sidebar-panel" id="panel-orderbook">
+          <div class="tv-panel-header">
+            <span data-i18n="tab_orderbook">សៀវភៅបញ្ជាទិញ-លក់</span>
+            <span style="font-size: 11px; color: var(--tv-text-secondary);" id="ob-symbol-tag">BTCUSDT</span>
+          </div>
+          <div class="tv-orderbook-container">
+            <div
+              style="display: flex; justify-content: space-between; color: var(--tv-text-secondary); padding: 4px 6px; font-weight: 600;">
+              <span data-i18n="ob_price">តម្លៃ</span>
+              <span data-i18n="ob_size">ចំនួន</span>
+              <span data-i18n="ob_total">សរុប</span>
+            </div>
+            <!-- Asks (Red) -->
+            <div id="orderbook-asks"></div>
+            <!-- Spread -->
+            <div class="tv-ob-spread">
+              <span id="ob-mid-price">4,151.60</span>
+              <span style="font-size: 10px; color: var(--tv-text-secondary); margin-left: 6px;" id="ob-spread-val"><span
+                  data-i18n="ob_spread">គម្លាតថ្លៃ Spread:</span> 0.20 (0.003%)</span>
+            </div>
+            <!-- Bids (Green) -->
+            <div id="orderbook-bids"></div>
+          </div>
+        </div>
+
+        <!-- 3. Time & Sales -->
+        <div class="tv-sidebar-panel" id="panel-trades">
+          <div class="tv-panel-header">
+            <span data-i18n="tab_timesales">កិច្ចព្រមព្រៀងជាក់ស្តែង</span>
+            <span style="font-size: 11px; color: var(--tv-green);">● កំពុងដំណើរការ</span>
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; color: var(--tv-text-secondary); padding: 6px 12px; font-weight: 600; font-family: var(--tv-mono); font-size: 11px;">
+            <span data-i18n="ts_price">តម្លៃ</span>
+            <span data-i18n="ts_size">ចំនួន</span>
+            <span data-i18n="ts_time">ម៉ោង</span>
+          </div>
+          <div class="tv-trades-list" id="recent-trades-list"></div>
+        </div>
+
+        <!-- 4. Paper Trading Execution Form -->
+        <div class="tv-sidebar-panel" id="panel-paper">
+          <div class="tv-panel-header">
+            <span data-i18n="tab_paper">ជួញដូរសាកល្បង</span>
+            <span style="font-size: 11px; color: var(--tv-blue);">Demo $100k</span>
+          </div>
+          <div class="tv-paper-card">
+            <div class="tv-paper-balance-label" data-i18n="pt_equity">ដើមទុនសរុប:</div>
+            <div class="tv-paper-balance-val" id="paper-equity-val">$100,000.00</div>
+            <div class="tv-paper-stat-grid">
+              <div class="tv-paper-stat-item"><span class="lbl" data-i18n="pt_balance">សមតុល្យគណនី:</span> <span
+                  id="paper-bal-val">$100,000.00</span></div>
+              <div class="tv-paper-stat-item"><span class="lbl" data-i18n="pt_unrealized">ចំណេញ/ខាតអណ្តែត:</span> <span
+                  id="paper-unrealized-val" style="color: var(--tv-text-bright);">$0.00</span></div>
+              <div class="tv-paper-stat-item"><span class="lbl" data-i18n="pt_margin_level">ប្រាក់ធានា Margin:</span>
+                <span id="paper-margin-val">$0.00</span></div>
+              <div class="tv-paper-stat-item"><span class="lbl" data-i18n="pt_free_margin">ប្រាក់ធានានៅសល់:</span> <span
+                  id="paper-free-val">$100,000.00</span></div>
+            </div>
+          </div>
+
+          <!-- Order Form -->
+          <div class="tv-paper-form">
+            <div class="tv-form-group">
+              <label data-i18n="pt_order_type">ប្រភេទបញ្ជា:</label>
+              <select class="tv-form-input" id="order-type-select">
+                <option value="market" data-i18n="pt_market">ប្រតិបត្តិការតម្លៃទីផ្សារ (Market)</option>
+              </select>
+            </div>
+            <div class="tv-form-group">
+              <label data-i18n="pt_qty">ចំនួន / Lots:</label>
+              <input type="number" class="tv-form-input" id="order-qty-input" value="1.0" step="0.1" min="0.01">
+            </div>
+            <div class="tv-form-group">
+              <label data-i18n="pt_sl">កាត់ខាត Stop Loss (តម្លៃ):</label>
+              <input type="number" class="tv-form-input" id="order-sl-input" placeholder="តម្លៃ SL (ជម្រើស)">
+            </div>
+            <div class="tv-form-group">
+              <label data-i18n="pt_tp">យកចំណេញ Take Profit (តម្លៃ):</label>
+              <input type="number" class="tv-form-input" id="order-tp-input" placeholder="តម្លៃ TP (ជម្រើស)">
+            </div>
+            <div class="tv-trade-btn-grid">
+              <button class="tv-action-btn sell" id="btn-sidebar-sell" data-i18n="pt_sell_btn">លក់ចុះ (SELL /
+                SHORT)</button>
+              <button class="tv-action-btn buy" id="btn-sidebar-buy" data-i18n="pt_buy_btn">ទិញឡើង (BUY / LONG)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. ICT Sessions -->
+        <div class="tv-sidebar-panel" id="panel-sessions">
+          <div class="tv-panel-header">
+            <span data-i18n="tab_sessions">វគ្គទីផ្សារ & Killzones</span>
+            <span style="font-size: 11px; color: var(--tv-text-secondary);">EST UTC-5</span>
+          </div>
+          <div style="padding: 10px 14px; font-size: 11px; color: var(--tv-text-secondary);">
+            តារាងពេលវេលា Smart Money Concepts ផ្អែកលើ ICT London Open, NY AM, និង NY PM Killzones។
+          </div>
+          <div class="tv-session-card">
+            <div class="tv-session-title">
+              <span data-i18n="sess_asia">វគ្គអាស៊ី (Asian Session - Tokyo)</span>
+              <span class="tv-session-status open">សកម្ម</span>
+            </div>
+            <div style="font-size: 11px; color: var(--tv-text-secondary);" data-i18n="sess_asia_hours">00:00 - 09:00 UTC
+              (ប្រមូលផ្តុំទុន Liquidity Range)</div>
+          </div>
+          <div class="tv-session-card">
+            <div class="tv-session-title">
+              <span data-i18n="sess_london">វគ្គឡុងដ៍ (London Open Killzone)</span>
+              <span class="tv-session-status closed">07:00 - 16:00 UTC</span>
+            </div>
+            <div style="font-size: 11px; color: var(--tv-text-secondary);" data-i18n="sess_london_hours">Judas Swing /
+              Manipulation បោកបញ្ឆោត</div>
+          </div>
+          <div class="tv-session-card">
+            <div class="tv-session-title">
+              <span data-i18n="sess_ny">វគ្គញូវយ៉ក (New York Open Killzone)</span>
+              <span class="tv-session-status closed">13:00 - 22:00 UTC</span>
+            </div>
+            <div style="font-size: 11px; color: var(--tv-text-secondary);" data-i18n="sess_ny_hours">Distribution /
+              Expansion រុញតម្លៃពិត</div>
+          </div>
+        </div>
+
+        <!-- 6. Technical Summary Gauge -->
+        <div class="tv-sidebar-panel" id="panel-technical">
+          <div class="tv-panel-header">
+            <span data-i18n="tab_gauge">រង្វាស់បច្ចេកទេស</span>
+            <span style="font-size: 11px; color: var(--tv-green); font-weight: 700;">សញ្ញាទិញខ្ពស់</span>
+          </div>
+          <div style="padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <div
+              style="width: 140px; height: 70px; border-top-left-radius: 70px; border-top-right-radius: 70px; background: linear-gradient(to right, var(--tv-red), var(--tv-yellow), var(--tv-green)); position: relative; overflow: hidden;">
+              <div
+                style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(25deg); transform-origin: bottom center; width: 4px; height: 55px; background: #fff; border-radius: 2px;">
+              </div>
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: var(--tv-green);" id="gauge-rating-text"
+              data-i18n="gauge_strong_buy">ទិញខ្លាំង (Strong Buy)</div>
+            <div
+              style="display: flex; justify-content: space-around; width: 100%; margin-top: 14px; font-family: var(--tv-mono); font-size: 11px; text-align: center;">
+              <div>
+                <div style="color: var(--tv-red); font-weight: 700;">2</div>
+                <div data-i18n="gauge_sell">លក់</div>
+              </div>
+              <div>
+                <div style="color: var(--tv-text-secondary); font-weight: 700;">4</div>
+                <div data-i18n="gauge_neutral">អព្យាក្រឹត</div>
+              </div>
+              <div>
+                <div style="color: var(--tv-green); font-weight: 700;">10</div>
+                <div data-i18n="gauge_buy">ទិញ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+
+
+  <!-- MODAL: SYMBOL SEARCH -->
+  <div class="tv-modal-overlay" id="modal-symbol-search">
+    <div class="tv-modal">
+      <div class="tv-modal-header">
+        <span data-i18n="modal_sym_title">ស្វែងរកគូជួញដូរ & ទីផ្សារហិរញ្ញវត្ថុ</span>
+        <button class="tv-modal-close" id="btn-close-symbol-modal">&times;</button>
+      </div>
+      <div style="padding: 12px 18px; border-bottom: 1px solid var(--tv-border);">
+        <input type="text" class="tv-search-input" id="symbol-search-input"
+          placeholder="វាយឈ្មោះគូជួញដូរ (ឧទាហរណ៍ BTC, XAU, EUR, US30)..." data-i18n-placeholder="modal_sym_search"
+          autofocus>
+      </div>
+      <div class="tv-modal-body" id="symbol-search-results"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: USER PROFILE & STORAGE (Authentication, Session, IndexedDB) -->
+  <div class="tv-modal-overlay" id="modal-user-profile">
+    <div class="tv-modal" style="width: 580px; max-height: 85vh;">
+      <div class="tv-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--tv-blue)" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span style="font-weight: 700; font-size: 14px;">គណនី & ការផ្ទុកទិន្នន័យ (User Profile & Storage)</span>
+        </div>
+        <button class="tv-modal-close" id="btn-close-user-modal">&times;</button>
+      </div>
+
+      <div class="tv-modal-tabs" style="display: flex; border-bottom: 1px solid var(--tv-border); padding: 0 16px; background: rgba(0,0,0,0.15);">
+        <button class="tv-modal-tab-btn active" data-tab="account" style="padding: 10px 16px; font-size: 12px; font-weight: 600; color: #fff; background: none; border: none; border-bottom: 2px solid var(--tv-blue); cursor: pointer;">គណនី (Account)</button>
+        <button class="tv-modal-tab-btn" data-tab="token" style="padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--tv-text-secondary); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer;">កាតសម្គាល់ & Token</button>
+        <button class="tv-modal-tab-btn" data-tab="storage" style="padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--tv-text-secondary); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer;">ទិន្នន័យលើ Browser (IndexedDB)</button>
+      </div>
+
+      <div class="tv-modal-body" style="padding: 16px 20px; overflow-y: auto;">
+        <!-- TAB 1: ACCOUNT (Login / Register / Profile) -->
+        <div class="tv-tab-pane active" id="pane-tab-account">
+          <!-- Active User Profile Card -->
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--tv-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div id="modal-user-avatar" style="width: 44px; height: 44px; border-radius: 50%; background: var(--tv-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff;">G</div>
+              <div>
+                <div id="modal-user-display-name" style="font-weight: 700; font-size: 14px; color: #fff;">Guest Trader</div>
+                <div id="modal-user-email-text" style="font-size: 11px; color: var(--tv-text-secondary); margin-top: 2px;">Guest Mode (Auto-Synced)</div>
+                <div style="margin-top: 4px; display: flex; gap: 6px; align-items: center;">
+                  <span id="badge-account-type" style="font-size: 10px; background: rgba(41,98,255,0.2); color: var(--tv-blue); padding: 2px 6px; border-radius: 4px; font-weight: 600;">Guest Session</span>
+                  <span id="badge-cloud-status" style="font-size: 10px; background: rgba(38,166,154,0.2); color: #26a69a; padding: 2px 6px; border-radius: 4px; font-weight: 600;">● Cloud Connected</span>
+                </div>
+              </div>
+            </div>
+            <button id="btn-auth-logout" style="background: rgba(242,54,69,0.15); color: #f23645; border: 1px solid rgba(242,54,69,0.3); padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; display: none;">Log Out</button>
+          </div>
+
+          <!-- Auth Forms (Login & Register) -->
+          <div id="auth-forms-container">
+            <!-- Toggle between Login and Register -->
+            <div style="display: flex; gap: 10px; margin-bottom: 14px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 6px;">
+              <button id="btn-subtab-login" class="active" style="flex: 1; padding: 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 4px; background: var(--tv-blue); color: #fff; cursor: pointer;">ចូលប្រើ (Sign In)</button>
+              <button id="btn-subtab-register" style="flex: 1; padding: 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 4px; background: transparent; color: var(--tv-text-secondary); cursor: pointer;">ចុះឈ្មោះ (Sign Up)</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="form-login-wrap">
+              <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 4px;">Email (អ៊ីមែល)</label>
+                <input type="email" id="input-login-email" class="tv-input-clean" placeholder="user@example.com" style="width: 100%; box-sizing: border-box;">
+              </div>
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 4px;">Password (លេខសម្ងាត់)</label>
+                <input type="password" id="input-login-password" class="tv-input-clean" placeholder="••••••••" style="width: 100%; box-sizing: border-box;">
+              </div>
+              <div id="login-feedback-msg" style="font-size: 12px; margin-bottom: 10px; display: none;"></div>
+              <button id="btn-submit-login" style="width: 100%; background: var(--tv-blue); color: #fff; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">Sign In & Sync (ចូលប្រើប្រព័ន្ធ)</button>
+            </div>
+
+            <!-- Register Form -->
+            <div id="form-register-wrap" style="display: none;">
+              <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 4px;">ឈ្មោះ Trader (Full Name)</label>
+                <input type="text" id="input-reg-name" class="tv-input-clean" placeholder="ឧ. Sokha Trader" style="width: 100%; box-sizing: border-box;">
+              </div>
+              <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 4px;">Email (អ៊ីមែល)</label>
+                <input type="email" id="input-reg-email" class="tv-input-clean" placeholder="user@example.com" style="width: 100%; box-sizing: border-box;">
+              </div>
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 4px;">Password (លេខសម្ងាត់)</label>
+                <input type="password" id="input-reg-password" class="tv-input-clean" placeholder="••••••••" style="width: 100%; box-sizing: border-box;">
+              </div>
+              <div id="reg-feedback-msg" style="font-size: 12px; margin-bottom: 10px; display: none;"></div>
+              <button id="btn-submit-register" style="width: 100%; background: #26a69a; color: #fff; border: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">ចុះឈ្មោះ & បង្កើតកាតសម្គាល់ (Create Account)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: TOKEN & IDENTIFIER -->
+        <div class="tv-tab-pane" id="pane-tab-token" style="display: none;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--tv-border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+            <div style="font-weight: 700; font-size: 12px; color: var(--tv-blue); margin-bottom: 6px;">1. Anonymous Device ID (UUID)</div>
+            <div style="font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 6px;">លេខសម្គាល់ឧបករណ៍សម្រាប់តាមដានសកម្មភាពទូទៅ (Guest Tracking):</div>
+            <div id="display-device-id" style="font-family: monospace; font-size: 12px; background: rgba(0,0,0,0.4); padding: 8px 10px; border-radius: 4px; color: #81c784; word-break: break-all;">-</div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--tv-border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+            <div style="font-weight: 700; font-size: 12px; color: var(--tv-blue); margin-bottom: 6px;">2. Session Token / Bearer Key</div>
+            <div style="font-size: 11px; color: var(--tv-text-secondary); margin-bottom: 6px;">Token សម្ងាត់ភ្ជាប់ទៅគ្រប់ HTTP Request (Authorization Header + Cookie):</div>
+            <div id="display-session-token" style="font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.4); padding: 8px 10px; border-radius: 4px; color: #90caf9; word-break: break-all;">-</div>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--tv-border); border-radius: 8px; padding: 14px;">
+            <div style="font-weight: 700; font-size: 12px; color: var(--tv-blue); margin-bottom: 6px;">3. Security & Persistence</div>
+            <ul style="font-size: 11px; color: var(--tv-text-secondary); line-height: 1.6; margin: 0; padding-left: 16px;">
+              <li>Token ត្រូវបាន Save ក្នុង <b>HTTP-only Cookie</b> និង <b>LocalStorage</b></li>
+              <li>Browser ភ្ជាប់ Token ដោយស្វ័យប្រវត្តទៅ Header រាល់ពេល Save ឬទាញយកទិន្នន័យ</li>
+              <li>មិនបាត់បង់ទិន្នន័យឡើយនៅពេលបិទ Browser ឬបិទកុំព្យូទ័រ</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- TAB 3: BROWSER STORAGE (IndexedDB & LocalStorage) -->
+        <div class="tv-tab-pane" id="pane-tab-storage" style="display: none;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--tv-border); border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+            <div style="font-weight: 700; font-size: 13px; color: #fff; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+              <span>ស្ថិតិការផ្ទុកលើ Browser (Storage Statistics)</span>
+              <span style="font-size: 10px; background: rgba(38,166,154,0.2); color: #26a69a; padding: 2px 6px; border-radius: 4px;">⚡ Instant 0ms Load</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 11px; color: var(--tv-text-secondary);">IndexedDB Candles</div>
+                <div id="stat-candles-count" style="font-size: 16px; font-weight: 700; color: #fff; margin-top: 4px;">0 bars</div>
+                <div style="font-size: 10px; color: #787b86;">Re-renders chart without download</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 11px; color: var(--tv-text-secondary);">IndexedDB Drawings</div>
+                <div id="stat-drawings-count" style="font-size: 16px; font-weight: 700; color: #fff; margin-top: 4px;">0 objects</div>
+                <div style="font-size: 10px; color: #787b86;">Gann Box, Trendlines, Fib, SMC</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 11px; color: var(--tv-text-secondary);">LocalStorage Settings</div>
+                <div id="stat-localstorage-size" style="font-size: 16px; font-weight: 700; color: #fff; margin-top: 4px;">0 KB</div>
+                <div style="font-size: 10px; color: #787b86;">Theme, Language, Watchlist, Tokens</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 11px; color: var(--tv-text-secondary);">Service Worker Cache</div>
+                <div id="stat-sw-status" style="font-size: 16px; font-weight: 700; color: #81c784; margin-top: 4px;">Active</div>
+                <div style="font-size: 10px; color: #787b86;">Offline scripts, styles, icons</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button id="btn-sync-cloud-now" style="flex: 1; background: var(--tv-blue); color: #fff; border: none; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+              ☁ Sync Now (ធ្វើសមកាលកម្ម Cloud)
+            </button>
+            <button id="btn-clear-local-cache" style="background: rgba(242,54,69,0.15); color: #f23645; border: 1px solid rgba(242,54,69,0.3); padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+              Clear Cache
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: INDICATORS -->
+  <div class="tv-modal-overlay" id="modal-indicators">
+    <div class="tv-modal" style="width: 620px;">
+      <div class="tv-modal-header">
+        <span data-i18n="modal_ind_title">សូចនាករបច្ចេកទេស & ICT Smart Money Concepts</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="tv-btn tv-btn-sm" id="btn-clear-all-indicators"
+            style="background: rgba(242, 54, 69, 0.15); color: #f23645; border: 1px solid rgba(242, 54, 69, 0.3); font-size: 11px; padding: 3px 8px; border-radius: 4px; cursor: pointer;">Remove
+            All</button>
+          <button class="tv-modal-close" id="btn-close-ind-modal">&times;</button>
+        </div>
+      </div>
+      <div class="tv-modal-body">
+        <div
+          style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--tv-blue); margin-bottom: 8px;">
+          ICT / Smart Money Concepts (SMC)</div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_ob">តំបន់បញ្ជាទិញ ICT Order Blocks (OB) & Mean Threshold (50%)</h4>
+            <p>Institutional displacement blocks with 50% Mean Threshold mitigation detection</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-ob"><span class="tv-slider"></span></label>
+        </div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_fvg">គម្លាតអតុល្យភាពតម្លៃ ICT Fair Value Gaps (FVG)</h4>
+            <p>3-candle imbalance zones with real-time mitigation status</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-fvg"><span class="tv-slider"></span></label>
+        </div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_liq">ការបោសសម្អាតទុន ICT Liquidity Sweeps (BSL / SSL)</h4>
+            <p>Identifies Buy-side & Sell-side swing sweeps and rejection wicks</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-liquidity"><span
+              class="tv-slider"></span></label>
+        </div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_bos">ការបំបែករចនាសម្ព័ន្ធទីផ្សារ Market Structure Break (BOS / CHoCH)</h4>
+            <p>Break of structure & change of character swing pivot markers</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-bos"><span class="tv-slider"></span></label>
+        </div>
+
+        <div
+          style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--tv-text-secondary); margin: 18px 0 8px 0;">
+          សូចនាករបច្ចេកទេសទូទៅ (Standard Technical Indicators)</div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_ema">បន្ទាត់មធ្យមភាគ Exponential Moving Average (EMA 20, 50, 200)</h4>
+            <p>Fast, intermediate, and long-term trend moving averages</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-ema"><span class="tv-slider"></span></label>
+        </div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_bb">រនាំងប្រែប្រួល Bollinger Bands (20, 2)</h4>
+            <p>Volatility envelope with upper, lower, and standard deviation bands</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-bb"><span class="tv-slider"></span></label>
+        </div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_rsi">សន្ទស្សន៍កម្លាំងទាក់ទង Relative Strength Index (RSI 14)</h4>
+            <p>Momentum oscillator with 70/30 overbought/oversold levels</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-rsi"><span class="tv-slider"></span></label>
+        </div>
+
+        <div class="tv-ind-item">
+          <div class="tv-ind-info">
+            <h4 data-i18n="ind_vol">កម្រិតបរិមាណ Volume Profile & Histogram</h4>
+            <p>Trading volume bars with color coded candle correlation</p>
+          </div>
+          <label class="tv-switch"><input type="checkbox" id="toggle-ind-volume"><span class="tv-slider"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRICE ALERT -->
+  <div class="tv-modal-overlay" id="modal-alert">
+    <div class="tv-modal" style="width: 420px;">
+      <div class="tv-modal-header">
+        <span data-i18n="modal_alert_title">បង្កើតការដាស់តឿនតម្លៃ (Price Alert)</span>
+        <button class="tv-modal-close" id="btn-close-alert-modal">&times;</button>
+      </div>
+      <div class="tv-modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="tv-form-group">
+          <label>លក្ខខណ្ឌ (Condition)</label>
+          <select class="tv-form-input">
+            <option>ឆ្លងកាត់ (Crossing)</option>
+            <option>ឆ្លងឡើង (Crossing Up)</option>
+            <option>ឆ្លងចុះ (Crossing Down)</option>
+          </select>
+        </div>
+        <div class="tv-form-group">
+          <label data-i18n="modal_alert_price">តម្លៃគោលដៅ:</label>
+          <input type="number" class="tv-form-input" id="alert-price-input" value="66000">
+        </div>
+        <div class="tv-form-group">
+          <label>ការជូនដំណឹង (Notification)</label>
+          <div style="font-size: 12px; color: var(--tv-text-secondary);">សម្លេងរោទ៍ + ការជូនដំណឹងលើផ្ទាំងអេក្រង់ (Audio
+            Beep + In-app Toast)</div>
+        </div>
+        <button class="tv-action-btn buy" id="btn-save-alert" style="margin-top: 8px;"
+          data-i18n="modal_alert_set">កំណត់ការដាស់តឿន</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DRAWING SETTINGS (TradingView Style) -->
+  <div class="tv-modal-overlay" id="modal-drawing-settings">
+    <div class="tv-modal tv-drawing-settings-modal">
+      <div class="tv-modal-header">
+        <div class="tv-modal-title-group">
+          <span class="tv-modal-icon" id="ds-modal-icon">⚙</span>
+          <span id="ds-modal-title">Drawing Settings</span>
+        </div>
+        <button class="tv-modal-close" id="btn-close-drawing-settings">&times;</button>
+      </div>
+
+      <!-- Settings Tabs Header -->
+      <div class="tv-settings-tabs-header">
+        <button class="tv-settings-tab-btn" data-tab="inputs" id="ds-tab-btn-inputs"
+          style="display: none;">Inputs</button>
+        <button class="tv-settings-tab-btn active" data-tab="style" id="ds-tab-btn-style">Style</button>
+        <button class="tv-settings-tab-btn" data-tab="coordinates" id="ds-tab-btn-coordinates">Coordinates</button>
+        <button class="tv-settings-tab-btn" data-tab="visibility" id="ds-tab-btn-visibility">Visibility</button>
+      </div>
+
+      <div class="tv-modal-body tv-settings-body">
+        <!-- TAB 0: INPUTS (TradingView Position Parameters) -->
+        <div class="tv-settings-tab-pane" id="ds-tab-inputs">
+          <div class="ds-section">
+            <div class="ds-section-title">TRADE PARAMETERS</div>
+            <div class="ds-row">
+              <label>Entry Price</label>
+              <input type="number" step="0.01" class="tv-form-input" id="ds-input-entry-price">
+            </div>
+            <div class="ds-row">
+              <label style="color: var(--tv-green); font-weight: 600;">Profit Target (TP)</label>
+              <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
+                <input type="number" step="0.01" class="tv-form-input" id="ds-input-target-price">
+                <span class="ds-val-badge" id="ds-target-pct"
+                  style="color: var(--tv-green); min-width: 60px; text-align: center;">+3.00%</span>
+              </div>
+            </div>
+            <div class="ds-row">
+              <label style="color: var(--tv-red); font-weight: 600;">Stop Loss (SL)</label>
+              <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
+                <input type="number" step="0.01" class="tv-form-input" id="ds-input-stop-price">
+                <span class="ds-val-badge" id="ds-stop-pct"
+                  style="color: var(--tv-red); min-width: 60px; text-align: center;">-1.50%</span>
+              </div>
+            </div>
+            <div class="ds-row"
+              style="margin-top: 10px; padding: 10px; background: var(--tv-bg-base); border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--tv-text-secondary); font-size: 12px;">Risk / Reward Ratio:</span>
+              <span id="ds-input-rr-val"
+                style="font-weight: 800; color: #ffffff; font-family: var(--tv-mono); font-size: 15px;">2.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1: STYLE -->
+        <div class="tv-settings-tab-pane active" id="ds-tab-style">
+          <!-- Generic Line Style & Color Section (Hidden for Fib) -->
+          <div class="ds-section" id="ds-generic-line-section">
+            <div class="ds-row">
+              <label>Line Color & Opacity</label>
+              <div class="ds-color-row">
+                <button type="button" class="ds-color-input" id="ds-line-color" value="#2962ff"
+                  style="background-color: #2962ff;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <input type="range" class="ds-range-slider" id="ds-line-opacity" min="10" max="100" value="100">
+                <span class="ds-val-badge" id="ds-line-opacity-val">100%</span>
+              </div>
+            </div>
+
+            <div class="ds-row">
+              <label>Line Thickness</label>
+              <div class="ds-btn-group" id="ds-width-group">
+                <button class="ds-choice-btn" data-val="1">1px</button>
+                <button class="ds-choice-btn active" data-val="2">2px</button>
+                <button class="ds-choice-btn" data-val="3">3px</button>
+                <button class="ds-choice-btn" data-val="4">4px</button>
+              </div>
+            </div>
+
+            <div class="ds-row">
+              <label>Line Style</label>
+              <div class="ds-btn-group" id="ds-style-group">
+                <button class="ds-choice-btn active" data-val="solid">—— Solid</button>
+                <button class="ds-choice-btn" data-val="dashed">- - Dashed</button>
+                <button class="ds-choice-btn" data-val="dotted">··· Dotted</button>
+              </div>
+            </div>
+
+            <div class="ds-row ds-check-row" id="ds-extend-row">
+              <label class="ds-checkbox-label">
+                <input type="checkbox" id="ds-extend-left"> Extend Left
+              </label>
+              <label class="ds-checkbox-label">
+                <input type="checkbox" id="ds-extend-right"> Extend Right
+              </label>
+            </div>
+          </div>
+
+          <!-- Background Fill Section (for Boxes, Gann, Channels) -->
+          <div class="ds-section" id="ds-fill-section">
+            <div class="ds-row">
+              <label class="ds-checkbox-label">
+                <input type="checkbox" id="ds-fill-enable" checked> Background Fill
+              </label>
+              <div class="ds-color-row">
+                <button type="button" class="ds-color-input" id="ds-fill-color" value="#2962ff"
+                  style="background-color: #2962ff;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <input type="range" class="ds-range-slider" id="ds-fill-opacity" min="0" max="100" value="20">
+                <span class="ds-val-badge" id="ds-fill-opacity-val">20%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text / Label Section -->
+          <div class="ds-section" id="ds-text-section" style="display: none;">
+            <div class="ds-row">
+              <label>Label Text</label>
+              <input type="text" class="tv-form-input" id="ds-text-content" placeholder="Label note...">
+            </div>
+          </div>
+
+          <!-- FIBONACCI RETRACEMENT 100% TRADINGVIEW PRO SECTION -->
+          <div class="tv-fib-settings-section" id="ds-fib-section" style="display: none;">
+            <!-- 1. Trend line row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-trendline-en" checked>
+                <span>Trend line</span>
+              </label>
+              <div class="tv-fib-controls-group">
+                <button type="button" class="ds-color-input tv-fib-swatch" id="ds-fib-trendline-col"
+                  value="rgba(209, 212, 220, 0.65)" style="background-color: rgba(209, 212, 220, 0.65);"
+                  onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <select class="tv-fib-custom-select" id="ds-fib-trendline-width">
+                  <option value="1">1px</option>
+                  <option value="2">2px</option>
+                  <option value="3">3px</option>
+                  <option value="4">4px</option>
+                </select>
+                <select class="tv-fib-custom-select" id="ds-fib-trendline-style">
+                  <option value="dashed">-- Dashed</option>
+                  <option value="solid">—— Solid</option>
+                  <option value="dotted">··· Dotted</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 2. Level line row -->
+            <div class="tv-fib-item-row">
+              <span class="tv-fib-title-label">Level line</span>
+              <div class="tv-fib-controls-group">
+                <button type="button" class="ds-color-input tv-fib-swatch" id="ds-fib-levelline-col" value="#2962ff"
+                  style="background-color: #2962ff;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <select class="tv-fib-custom-select" id="ds-fib-levelline-width">
+                  <option value="1">1px</option>
+                  <option value="2">2px</option>
+                  <option value="3">3px</option>
+                  <option value="4">4px</option>
+                </select>
+                <select class="tv-fib-custom-select" id="ds-fib-levelline-style">
+                  <option value="solid">—— Solid</option>
+                  <option value="dashed">-- Dashed</option>
+                  <option value="dotted">··· Dotted</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 3. Extend row -->
+            <div class="tv-fib-item-row">
+              <span class="tv-fib-title-label">Extend</span>
+              <div class="tv-fib-controls-group">
+                <select class="tv-fib-custom-select" id="ds-fib-extend-mode" style="min-width: 130px;">
+                  <option value="none">Don't extend</option>
+                  <option value="left">Extend Left</option>
+                  <option value="right">Extend Right</option>
+                  <option value="both">Extend Lines</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="tv-fib-sep"></div>
+
+            <!-- 4. 24 Levels Grid (2 Columns of 12 Rows each) -->
+            <div class="tv-fib-levels-2col-grid" id="ds-fib-levels-container">
+              <!-- Dynamically rendered with 24 levels -->
+            </div>
+
+            <div class="tv-fib-sep"></div>
+
+            <!-- 5. Use one color row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-use-one-color">
+                <span>Use one color</span>
+              </label>
+              <div class="tv-fib-controls-group">
+                <button type="button" class="ds-color-input tv-fib-swatch" id="ds-fib-one-color" value="#00897b"
+                  style="background-color: #00897b;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <!-- 6. Background row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-bg-enable" checked>
+                <span>Background</span>
+              </label>
+              <div class="tv-fib-controls-group">
+                <input type="range" class="tv-fib-range-slider" id="ds-fib-bg-opacity" min="0" max="100" value="20">
+                <span class="tv-fib-val-badge" id="ds-fib-bg-opacity-val">20%</span>
+              </div>
+            </div>
+
+            <!-- 7. Reverse row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-reverse">
+                <span>Reverse</span>
+              </label>
+            </div>
+
+            <!-- 8. Prices row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-prices" checked>
+                <span>Prices</span>
+              </label>
+            </div>
+
+            <!-- 9. Levels row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-levels-enable" checked>
+                <span>Levels</span>
+              </label>
+              <div class="tv-fib-controls-group">
+                <select class="tv-fib-custom-select" id="ds-fib-levels-format" style="min-width: 95px;">
+                  <option value="values">Values</option>
+                  <option value="percents">Percents</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 10. Labels row -->
+            <div class="tv-fib-item-row">
+              <span class="tv-fib-title-label">Labels</span>
+              <div class="tv-fib-controls-group">
+                <select class="tv-fib-custom-select" id="ds-fib-label-horz" style="min-width: 85px;">
+                  <option value="left" selected>Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+                <select class="tv-fib-custom-select" id="ds-fib-label-vert" style="min-width: 85px;">
+                  <option value="top">Top</option>
+                  <option value="middle" selected>Middle</option>
+                  <option value="bottom">Bottom</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 11. Text row -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-text-enable" checked>
+                <span>Text</span>
+              </label>
+              <div class="tv-fib-controls-group">
+                <select class="tv-fib-custom-select" id="ds-fib-text-horz" style="min-width: 85px;">
+                  <option value="center" selected>Center</option>
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                </select>
+                <select class="tv-fib-custom-select" id="ds-fib-text-vert" style="min-width: 85px;">
+                  <option value="middle" selected>Middle</option>
+                  <option value="top">Top</option>
+                  <option value="bottom">Bottom</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 12. Font size row -->
+            <div class="tv-fib-item-row">
+              <span class="tv-fib-title-label">Font size</span>
+              <div class="tv-fib-controls-group">
+                <select class="tv-fib-custom-select" id="ds-fib-font-size" style="min-width: 75px;">
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12" selected>12</option>
+                  <option value="14">14</option>
+                  <option value="16">16</option>
+                  <option value="20">20</option>
+                  <option value="24">24</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 13. Fib levels based on log scale -->
+            <div class="tv-fib-item-row">
+              <label class="tv-fib-chk-label">
+                <input type="checkbox" id="ds-fib-log-scale">
+                <span>Fib levels based on log scale</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- GANN BOX 100% TRADINGVIEW PRO SECTION -->
+          <div class="tv-gann-settings-section" id="ds-gannbox-section" style="display: none;">
+            <!-- PRICE LEVELS -->
+            <div class="tv-gann-section-title">PRICE LEVELS</div>
+            <div class="tv-gann-levels-grid" id="ds-gann-price-levels-container">
+              <!-- Dynamically populated 7 price levels (2 columns) -->
+            </div>
+
+            <!-- Price sub options -->
+            <div class="tv-gann-sub-options">
+              <div class="tv-gann-chk-row">
+                <label class="tv-gann-chk-label">
+                  <input type="checkbox" id="ds-gann-left-labels" checked>
+                  <span>Left labels</span>
+                </label>
+              </div>
+              <div class="tv-gann-chk-row">
+                <label class="tv-gann-chk-label">
+                  <input type="checkbox" id="ds-gann-right-labels" checked>
+                  <span>Right labels</span>
+                </label>
+              </div>
+              <div class="tv-gann-item-row">
+                <label class="tv-gann-chk-label">
+                  <input type="checkbox" id="ds-gann-price-bg-en" checked>
+                  <span>Background</span>
+                </label>
+                <div class="tv-gann-controls-group">
+                  <input type="range" class="tv-gann-range-slider" id="ds-gann-price-bg-opacity" min="0" max="100" value="20">
+                  <span class="tv-gann-val-badge" id="ds-gann-price-bg-opacity-val">20%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tv-gann-sep"></div>
+
+            <!-- TIME LEVELS -->
+            <div class="tv-gann-section-title">TIME LEVELS</div>
+            <div class="tv-gann-levels-grid" id="ds-gann-time-levels-container">
+              <!-- Dynamically populated 7 time levels (2 columns) -->
+            </div>
+
+            <!-- Time sub options -->
+            <div class="tv-gann-sub-options">
+              <div class="tv-gann-chk-row">
+                <label class="tv-gann-chk-label">
+                  <input type="checkbox" id="ds-gann-top-labels">
+                  <span>Top labels</span>
+                </label>
+              </div>
+              <div class="tv-gann-chk-row">
+                <label class="tv-gann-chk-label">
+                  <input type="checkbox" id="ds-gann-bottom-labels" checked>
+                  <span>Bottom labels</span>
+                </label>
+              </div>
+              <div class="tv-gann-item-row">
+                <label class="tv-gann-chk-label">
+                  <input type="checkbox" id="ds-gann-time-bg-en" checked>
+                  <span>Background</span>
+                </label>
+                <div class="tv-gann-controls-group">
+                  <input type="range" class="tv-gann-range-slider" id="ds-gann-time-bg-opacity" min="0" max="100" value="20">
+                  <span class="tv-gann-val-badge" id="ds-gann-time-bg-opacity-val">20%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tv-gann-sep"></div>
+
+            <!-- GENERAL OPTIONS -->
+            <div class="tv-gann-item-row">
+              <label class="tv-gann-chk-label">
+                <input type="checkbox" id="ds-gann-use-one-color">
+                <span>Use one color</span>
+              </label>
+              <div class="tv-gann-controls-group">
+                <button type="button" class="ds-color-input tv-gann-swatch" id="ds-gann-one-color" value="#00bcd4"
+                  style="background-color: #00bcd4;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-gann-item-row">
+              <label class="tv-gann-chk-label">
+                <input type="checkbox" id="ds-gann-angles">
+                <span>Angles</span>
+              </label>
+              <div class="tv-gann-controls-group">
+                <button type="button" class="ds-color-input tv-gann-swatch" id="ds-gann-angles-color" value="#787b86"
+                  style="background-color: #787b86;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-gann-item-row">
+              <label class="tv-gann-chk-label">
+                <input type="checkbox" id="ds-gann-reverse">
+                <span>Reverse</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: COORDINATES -->
+        <div class="tv-settings-tab-pane" id="ds-tab-coordinates">
+          <div class="ds-section">
+            <div class="ds-coord-box">
+              <div class="ds-coord-title">POINT 1</div>
+              <div class="ds-row">
+                <label>Price</label>
+                <input type="number" step="0.01" class="tv-form-input" id="ds-coord-p1-price">
+              </div>
+              <div class="ds-row">
+                <label>Time / Bar</label>
+                <input type="text" class="tv-form-input" id="ds-coord-p1-time" readonly>
+              </div>
+            </div>
+
+            <div class="ds-coord-box" id="ds-coord-p2-box">
+              <div class="ds-coord-title">POINT 2</div>
+              <div class="ds-row">
+                <label>Price</label>
+                <input type="number" step="0.01" class="tv-form-input" id="ds-coord-p2-price">
+              </div>
+              <div class="ds-row">
+                <label>Time / Bar</label>
+                <input type="text" class="tv-form-input" id="ds-coord-p2-time" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: VISIBILITY -->
+        <div class="tv-settings-tab-pane" id="ds-tab-visibility">
+          <div class="ds-section">
+            <div class="ds-vis-grid">
+              <label class="ds-checkbox-label"><input type="checkbox" checked> Seconds</label>
+              <label class="ds-checkbox-label"><input type="checkbox" checked> Minutes</label>
+              <label class="ds-checkbox-label"><input type="checkbox" checked> Hours</label>
+              <label class="ds-checkbox-label"><input type="checkbox" checked> Days</label>
+              <label class="ds-checkbox-label"><input type="checkbox" checked> Weeks</label>
+              <label class="ds-checkbox-label"><input type="checkbox" checked> Months</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Modal Footer -->
+      <div class="tv-modal-footer">
+        <button class="tv-btn secondary" id="btn-ds-defaults">Apply Defaults</button>
+        <div class="footer-actions">
+          <button class="tv-btn secondary" id="btn-ds-cancel">Cancel</button>
+          <button class="tv-btn primary" id="btn-ds-save">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       TRADINGVIEW MASTER CHART SETTINGS MODAL (Exact match to Photos 2, 3, 4, 5)
+       ========================================================================== -->
+  <div class="tv-modal-overlay" id="modal-chart-settings">
+    <div class="tv-modal tv-chart-settings-modal">
+      <!-- Modal Header -->
+      <div class="tv-modal-header">
+        <span class="tv-modal-title">Settings</span>
+        <button class="tv-modal-close" id="btn-close-chart-settings" title="Close">&times;</button>
+      </div>
+
+      <!-- Modal Body (Two-column layout) -->
+      <div class="tv-chart-settings-body">
+        <!-- Left Vertical Navigation Tabs -->
+        <div class="tv-cs-nav">
+          <!-- 1. Symbol -->
+          <div class="tv-cs-nav-item active" data-cs-tab="symbol">
+            <svg class="tv-cs-nav-icon" viewBox="0 0 24 24">
+              <path d="M9 4v16M15 4v16M7 7h4v8H7zM13 9h4v8h-4z" fill="none" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span>Symbol</span>
+          </div>
+
+          <!-- 2. Status line -->
+          <div class="tv-cs-nav-item" data-cs-tab="status_line">
+            <svg class="tv-cs-nav-icon" viewBox="0 0 24 24">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+              <circle cx="8" cy="6" r="2" fill="currentColor" />
+              <circle cx="16" cy="12" r="2" fill="currentColor" />
+              <circle cx="10" cy="18" r="2" fill="currentColor" />
+            </svg>
+            <span>Status line</span>
+          </div>
+
+          <!-- 3. Scales and lines -->
+          <div class="tv-cs-nav-item" data-cs-tab="scales_lines">
+            <svg class="tv-cs-nav-icon" viewBox="0 0 24 24">
+              <path d="M4 4v16h16" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M4 14l6-6 4 4 6-6" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="10" cy="8" r="1.5" fill="currentColor" />
+              <circle cx="20" cy="6" r="1.5" fill="currentColor" />
+            </svg>
+            <span>Scales and lines</span>
+          </div>
+
+          <!-- 4. Canvas -->
+          <div class="tv-cs-nav-item" data-cs-tab="canvas">
+            <svg class="tv-cs-nav-icon" viewBox="0 0 24 24">
+              <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L7.5 19.5l-4.5 1.5 1.5-4.5L18.375 2.625z" fill="none"
+                stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span>Canvas</span>
+          </div>
+
+          <!-- 5. Trading -->
+          <div class="tv-cs-nav-item" data-cs-tab="trading">
+            <svg class="tv-cs-nav-icon" viewBox="0 0 24 24">
+              <path d="M7 10l5-5 5 5M17 14l-5 5-5-5" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <span>Trading</span>
+          </div>
+
+          <!-- 6. Alerts -->
+          <div class="tv-cs-nav-item" data-cs-tab="alerts">
+            <svg class="tv-cs-nav-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="13" r="7" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <path d="M12 9v4l2 2M5 3L2 6M19 3l3 3" fill="none" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span>Alerts</span>
+          </div>
+        </div>
+
+        <!-- Right Content Area -->
+        <div class="tv-cs-content">
+          <!-- PANE 1: SYMBOL (Photo 2) -->
+          <div class="tv-cs-pane active" id="pane-cs-symbol">
+            <div class="tv-cs-section-header">CANDLES</div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-candles-prev-close">
+              <span>Color bars based on previous close</span>
+            </label>
+
+            <!-- Body colors (Up / Down) -->
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-candles-body" checked>
+                <span>Body</span>
+              </label>
+              <div class="tv-cs-swatches">
+                <button type="button" class="tv-cs-color-input" id="cs-candle-up" value="#089981"
+                  style="background-color: #089981;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <button type="button" class="tv-cs-color-input" id="cs-candle-down" value="#f23645"
+                  style="background-color: #f23645;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <!-- Borders colors (Up / Down) -->
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-candles-borders" checked>
+                <span>Borders</span>
+              </label>
+              <div class="tv-cs-swatches">
+                <button type="button" class="tv-cs-color-input" id="cs-border-up" value="#089981"
+                  style="background-color: #089981;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <button type="button" class="tv-cs-color-input" id="cs-border-down" value="#f23645"
+                  style="background-color: #f23645;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <!-- Wick colors (Up / Down) -->
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-candles-wick" checked>
+                <span>Wick</span>
+              </label>
+              <div class="tv-cs-swatches">
+                <button type="button" class="tv-cs-color-input" id="cs-wick-up" value="#089981"
+                  style="background-color: #089981;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <button type="button" class="tv-cs-color-input" id="cs-wick-down" value="#f23645"
+                  style="background-color: #f23645;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 18px;">DATA MODIFICATION</div>
+
+            <div class="tv-cs-row">
+              <span>Precision</span>
+              <select class="tv-cs-select" id="cs-precision">
+                <option value="default" selected>Default</option>
+                <option value="1">1/10 (0.1)</option>
+                <option value="2">1/100 (0.01)</option>
+                <option value="3">1/1000 (0.001)</option>
+                <option value="4">1/10000 (0.0001)</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Timezone</span>
+              <select class="tv-cs-select" id="cs-timezone">
+                <option value="America/New_York">(UTC-4) New York</option>
+                <option value="Europe/London">(UTC+0) London</option>
+                <option value="Asia/Phnom_Penh" selected>(UTC+7) Bangkok / Phnom Penh</option>
+                <option value="Asia/Singapore">(UTC+8) Singapore / Hong Kong</option>
+                <option value="Asia/Tokyo">(UTC+9) Tokyo</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- PANE 2: STATUS LINE (Photo 3) -->
+          <div class="tv-cs-pane" id="pane-cs-status_line">
+            <div class="tv-cs-section-header">INSTRUMENT</div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-logo" checked>
+              <span>Logo</span>
+            </label>
+
+            <div class="tv-cs-row" style="margin-top: 4px;">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-sl-title" checked>
+                <span>Title</span>
+              </label>
+              <select class="tv-cs-select" id="cs-sl-title-mode" style="width: 140px;">
+                <option value="name" selected>Name</option>
+                <option value="ticker">Ticker</option>
+                <option value="description">Description</option>
+              </select>
+            </div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-market-status" checked>
+              <span>Open market status</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-chart-values" checked>
+              <span>Chart values</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-bar-change" checked>
+              <span>Bar change values</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-volume" checked>
+              <span>Volume</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-last-day-change">
+              <span>Last day change values</span>
+            </label>
+
+            <div style="margin: 8px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-sl-buysell" checked>
+                <span>Buy/sell buttons</span>
+              </label>
+              <div class="tv-cs-subtext">Displays buy and sell buttons directly on the chart</div>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 16px;">INDICATORS</div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-ind-titles" checked>
+              <span>Titles</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row" style="margin-left: 24px;">
+              <input type="checkbox" id="cs-sl-ind-inputs">
+              <span>Inputs</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-sl-ind-values" checked>
+              <span>Values</span>
+            </label>
+
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-sl-ind-bg" checked>
+                <span>Background</span>
+              </label>
+              <input type="range" class="tv-cs-range" id="cs-sl-ind-bg-opacity" min="0" max="100" value="50">
+            </div>
+          </div>
+
+          <!-- PANE 3: SCALES AND LINES (Photo 4) -->
+          <div class="tv-cs-pane" id="pane-cs-scales_lines">
+            <div class="tv-cs-section-header">PRICE SCALE</div>
+
+            <div class="tv-cs-row">
+              <span>Currency and Unit</span>
+              <select class="tv-cs-select" id="cs-scale-currency">
+                <option value="hover" selected>Visible on mouse over</option>
+                <option value="always">Always visible</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Scale modes (A and L)</span>
+              <select class="tv-cs-select" id="cs-scale-modes">
+                <option value="hover" selected>Visible on mouse over</option>
+                <option value="always">Always visible</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-scale-lock-ratio">
+                <span>Lock price to bar ratio</span>
+              </label>
+              <input type="text" class="tv-cs-input" id="cs-scale-ratio-val" value="0.450156" style="width: 140px;"
+                readonly>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Scales placement</span>
+              <select class="tv-cs-select" id="cs-scale-placement">
+                <option value="auto" selected>Auto</option>
+                <option value="right">Right</option>
+                <option value="left">Left</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 16px;">PRICE LABELS & LINES</div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-lbl-no-overlap" checked>
+              <span>No overlapping labels</span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-lbl-plus-btn" checked>
+              <span>Plus button <span style="font-size: 11px; color: var(--tv-text-secondary);">?</span></span>
+            </label>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-lbl-countdown" checked>
+              <span>Countdown to bar close</span>
+            </label>
+
+            <div class="tv-cs-row">
+              <span>Symbol</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <select class="tv-cs-select" id="cs-lbl-symbol-mode" style="width: 130px;">
+                  <option value="val_line" selected>Value, line</option>
+                  <option value="val">Value only</option>
+                  <option value="hidden">Hidden</option>
+                </select>
+                <button type="button" class="tv-cs-color-input" id="cs-lbl-symbol-col" value="#2962ff"
+                  style="background-color: #2962ff;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Previous day close</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <select class="tv-cs-select" id="cs-lbl-prev-close" style="width: 130px;">
+                  <option value="hidden" selected>Hidden</option>
+                  <option value="line">Line</option>
+                </select>
+                <button type="button" class="tv-cs-color-input" id="cs-lbl-prev-close-col" value="#787b86"
+                  style="background-color: #787b86;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Indicators and financials</span>
+              <select class="tv-cs-select" id="cs-lbl-ind-val" style="width: 130px;">
+                <option value="value" selected>Value</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>High and low</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <select class="tv-cs-select" id="cs-lbl-high-low" style="width: 130px;">
+                  <option value="hidden" selected>Hidden</option>
+                  <option value="line">Line</option>
+                </select>
+                <button type="button" class="tv-cs-color-input" id="cs-lbl-high-low-col" value="#ff9800"
+                  style="background-color: #ff9800;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Bid and ask</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <select class="tv-cs-select" id="cs-lbl-bid-ask" style="width: 130px;">
+                  <option value="hidden" selected>Hidden</option>
+                  <option value="line">Line</option>
+                </select>
+                <button type="button" class="tv-cs-color-input" id="cs-lbl-bid-col" value="#2962ff"
+                  style="background-color: #2962ff;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <button type="button" class="tv-cs-color-input" id="cs-lbl-ask-col" value="#f23645"
+                  style="background-color: #f23645;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 16px;">TIME SCALE</div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-ts-day-week" checked>
+              <span>Day of week on labels</span>
+            </label>
+
+            <div class="tv-cs-row">
+              <span>Date format</span>
+              <select class="tv-cs-select" id="cs-ts-date-format">
+                <option value="mon_day_yr" selected>Mon 29 Sep '97</option>
+                <option value="day_mon_yr">29 Sep '97</option>
+                <option value="iso">1997-09-29</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Time hours format</span>
+              <select class="tv-cs-select" id="cs-ts-hours-format">
+                <option value="24" selected>24-hours</option>
+                <option value="12">12-hours</option>
+              </select>
+            </div>
+
+            <label class="tv-cs-checkbox-row">
+              <input type="checkbox" id="cs-ts-save-left">
+              <span>Save chart left edge position when changing interval</span>
+            </label>
+          </div>
+
+          <!-- PANE 4: CANVAS (Photo 5) -->
+          <div class="tv-cs-pane" id="pane-cs-canvas">
+            <div class="tv-cs-section-header">CHART BASIC STYLES</div>
+
+            <div class="tv-cs-row">
+              <span>Background</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <select class="tv-cs-select" id="cs-cv-bg-type" style="width: 110px;">
+                  <option value="solid" selected>Solid</option>
+                  <option value="gradient">Gradient</option>
+                </select>
+                <button type="button" class="tv-cs-color-input" id="cs-cv-bg-color" value="#131722"
+                  style="background-color: #131722;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-cv-grid-vert" checked>
+                <span>Vertical grid lines</span>
+              </label>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="tv-cs-color-input" id="cs-cv-grid-vert-col" value="#1e222d"
+                  style="background-color: #1e222d;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <span class="tv-cs-dash-sample">···</span>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-cv-grid-horz" checked>
+                <span>Horizontal grid lines</span>
+              </label>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="tv-cs-color-input" id="cs-cv-grid-horz-col" value="#1e222d"
+                  style="background-color: #1e222d;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <span class="tv-cs-dash-sample">···</span>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Pane separators</span>
+              <button type="button" class="tv-cs-color-input" id="cs-cv-pane-sep-col" value="#2a2e39"
+                style="background-color: #2a2e39;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Crosshair</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="tv-cs-color-input" id="cs-cv-crosshair-col" value="#787b86"
+                  style="background-color: #787b86;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <span class="tv-cs-dash-sample">- -</span>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Watermark</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <select class="tv-cs-select" id="cs-cv-watermark-mode" style="width: 140px;">
+                  <option value="replay" selected>Replay mode</option>
+                  <option value="large">Large Symbol</option>
+                  <option value="disabled">Disabled</option>
+                </select>
+                <button type="button" class="tv-cs-color-input" id="cs-cv-watermark-col" value="#2a2e39"
+                  style="background-color: #2a2e39;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 16px;">SCALES</div>
+
+            <div class="tv-cs-row">
+              <span>Text</span>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="tv-cs-color-input" id="cs-cv-scale-text-col" value="#787b86"
+                  style="background-color: #787b86;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+                <select class="tv-cs-select" id="cs-cv-scale-text-size" style="width: 70px;">
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12" selected>12</option>
+                  <option value="14">14</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Lines</span>
+              <button type="button" class="tv-cs-color-input" id="cs-cv-scale-lines-col" value="#2a2e39"
+                style="background-color: #2a2e39;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 16px;">BUTTONS</div>
+
+            <div class="tv-cs-row">
+              <span>Navigation</span>
+              <select class="tv-cs-select" id="cs-cv-nav-buttons">
+                <option value="hover" selected>Visible on mouse over</option>
+                <option value="always">Always visible</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Pane</span>
+              <select class="tv-cs-select" id="cs-cv-pane-buttons">
+                <option value="hover" selected>Visible on mouse over</option>
+                <option value="always">Always visible</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+
+            <div class="tv-cs-section-header" style="margin-top: 16px;">MARGINS</div>
+
+            <div class="tv-cs-row">
+              <span>Top</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="number" class="tv-cs-input" id="cs-margin-top" value="10" min="0" max="40"
+                  style="width: 80px;">
+                <span>%</span>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Bottom</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="number" class="tv-cs-input" id="cs-margin-bottom" value="8" min="0" max="40"
+                  style="width: 80px;">
+                <span>%</span>
+              </div>
+            </div>
+
+            <div class="tv-cs-row">
+              <span>Right</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="number" class="tv-cs-input" id="cs-margin-right" value="10" min="0" max="100"
+                  style="width: 80px;">
+                <span>bars</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 5: TRADING (Exact match to Photo 1) -->
+          <div class="tv-cs-pane" id="pane-cs-trading">
+            <div class="tv-cs-section-header">GENERAL</div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-buysell" checked>
+                <span>Buy/sell buttons</span>
+              </label>
+              <div class="tv-cs-subtext">Displays buy and sell buttons directly on the chart</div>
+            </div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-one-click">
+                <span>One-click trading <span class="tv-cs-hint"
+                    title="Instantly place, edit, cancel orders, or close positions without confirmation">?</span></span>
+              </label>
+              <div class="tv-cs-subtext">Instantly place, edit, cancel orders, or close positions without confirmation
+              </div>
+            </div>
+
+            <div class="tv-cs-row" style="align-items: center; margin: 6px 0;">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-tr-sound" checked>
+                <span>Execution sound</span>
+              </label>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"
+                  style="color: var(--tv-text-secondary);">
+                  <path
+                    d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                </svg>
+                <input type="range" class="tv-cs-range" id="cs-tr-sound-vol" min="0" max="100" value="80"
+                  style="width: 110px;">
+              </div>
+            </div>
+            <div style="margin-left: 24px; margin-bottom: 6px;">
+              <select class="tv-cs-select" id="cs-tr-sound-type" style="width: 140px;">
+                <option value="alarm_clock" selected>Alarm Clock</option>
+                <option value="bell">Bell</option>
+                <option value="chime">Chime</option>
+                <option value="pop">Pop</option>
+              </select>
+            </div>
+
+            <label class="tv-cs-checkbox-row" style="margin: 4px 0;">
+              <input type="checkbox" id="cs-tr-only-rejections">
+              <span>Show only rejection notifications</span>
+            </label>
+
+            <div class="tv-cs-section-header" style="margin-top: 14px;">APPEARANCE</div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-positions-orders" checked>
+                <span>Positions and orders <span class="tv-cs-hint"
+                    title="Show open positions and pending orders on the chart">ⓘ</span></span>
+              </label>
+
+              <!-- Sub-item: Reverse position button -->
+              <div style="margin-left: 24px; margin-top: 4px;">
+                <label class="tv-cs-checkbox-row">
+                  <input type="checkbox" id="cs-tr-reverse-btn" checked>
+                  <span>Reverse position button</span>
+                </label>
+                <div class="tv-cs-subtext">Adds the reverse button next to the open position on the chart</div>
+              </div>
+            </div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-project-order" checked>
+                <span>Project order for market orders</span>
+              </label>
+              <div class="tv-cs-subtext">Shows a project order on the chart before sending a market order</div>
+            </div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-pnl-val" checked>
+                <span>Profit and loss value <span class="tv-cs-hint"
+                    title="Display units for profit and loss">?</span></span>
+              </label>
+
+              <!-- Sub-item: Positions -->
+              <div class="tv-cs-row" style="margin-left: 24px; margin-top: 4px;">
+                <label class="tv-cs-checkbox-label">
+                  <input type="checkbox" id="cs-tr-pnl-pos" checked>
+                  <span>Positions</span>
+                </label>
+                <select class="tv-cs-select" id="cs-tr-pnl-pos-mode" style="width: 110px;">
+                  <option value="money" selected>Money</option>
+                  <option value="percent">Percentage</option>
+                  <option value="ticks">Ticks</option>
+                </select>
+              </div>
+
+              <!-- Sub-item: Brackets -->
+              <div class="tv-cs-row" style="margin-left: 24px; margin-top: 4px;">
+                <label class="tv-cs-checkbox-label">
+                  <input type="checkbox" id="cs-tr-pnl-brackets" checked>
+                  <span>Brackets</span>
+                </label>
+                <select class="tv-cs-select" id="cs-tr-pnl-brackets-mode" style="width: 110px;">
+                  <option value="money" selected>Money</option>
+                  <option value="percent">Percentage</option>
+                  <option value="ticks">Ticks</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-exec-marks" checked>
+                <span>Execution marks <span class="tv-cs-hint"
+                    title="Shows executions marks where orders were filled">ⓘ</span></span>
+              </label>
+              <!-- Sub-item: Execution labels -->
+              <div style="margin-left: 24px; margin-top: 4px;">
+                <label class="tv-cs-checkbox-row">
+                  <input type="checkbox" id="cs-tr-exec-labels">
+                  <span>Execution labels</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="tv-cs-checkbox-row" style="margin: 4px 0;">
+              <input type="checkbox" id="cs-tr-extend-lines" checked>
+              <span>Extended price lines across the entire chart width</span>
+            </label>
+
+            <div class="tv-cs-row" style="margin: 6px 0;">
+              <span>Order and position alignment</span>
+              <select class="tv-cs-select" id="cs-tr-align" style="width: 110px;">
+                <option value="right" selected>Right</option>
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+              </select>
+            </div>
+
+            <div style="margin: 4px 0;">
+              <label class="tv-cs-checkbox-row">
+                <input type="checkbox" id="cs-tr-snapshots">
+                <span>Orders, executions, and positions in chart snapshots</span>
+              </label>
+              <div class="tv-cs-subtext">Shows your trades on the chart in snapshots</div>
+            </div>
+          </div>
+
+          <!-- PANE 6: ALERTS (Exact match to Photo 2) -->
+          <div class="tv-cs-pane" id="pane-cs-alerts">
+            <div class="tv-cs-section-header">CHART LINE VISIBILITY</div>
+
+            <div class="tv-cs-row" style="margin: 6px 0;">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-alt-lines" checked>
+                <span>Alert lines</span>
+              </label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="tv-cs-color-input" id="cs-alt-color" value="#f23645"
+                  style="background-color: #f23645;" onclick="window.openTradingViewColorPicker(this, event)"></button>
+              </div>
+            </div>
+
+            <label class="tv-cs-checkbox-row" style="margin: 6px 0;">
+              <input type="checkbox" id="cs-alt-only-active" checked>
+              <span>Only active alerts</span>
+            </label>
+
+            <div class="tv-cs-section-header" style="margin-top: 18px;">NOTIFICATIONS</div>
+
+            <div class="tv-cs-row" style="align-items: center; margin: 8px 0;">
+              <label class="tv-cs-checkbox-label">
+                <input type="checkbox" id="cs-alt-sound-cb" checked>
+                <span>Alert volume</span>
+              </label>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"
+                  style="color: var(--tv-text-secondary);">
+                  <path
+                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                </svg>
+                <input type="range" class="tv-cs-range" id="cs-alt-volume" min="0" max="100" value="75"
+                  style="width: 120px;">
+              </div>
+            </div>
+
+            <label class="tv-cs-checkbox-row" style="margin: 6px 0;">
+              <input type="checkbox" id="cs-alt-auto-hide-toast" checked>
+              <span>Automatically hide toasts <span class="tv-cs-hint"
+                  title="Automatically dismiss alert toast notifications after 3 seconds">?</span></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer (Photos 2-5) -->
+      <div class="tv-cs-footer">
+        <button class="tv-cs-btn subtle" id="btn-cs-template">Template ⌄</button>
+        <div class="tv-cs-footer-right">
+          <button class="tv-cs-btn subtle" id="btn-cs-apply-all">Apply to all</button>
+          <button class="tv-cs-btn secondary" id="btn-cs-cancel">Cancel</button>
+          <button class="tv-cs-btn primary" id="btn-cs-ok">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- TRADINGVIEW RIGHT-CLICK CONTEXT MENU (Exact match to Image) -->
+  <div class="tv-context-menu" id="tv-chart-context-menu" style="display: none;">
+    <!-- 1. Reset chart view -->
+    <div class="tv-ctx-item" data-action="reset_view">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon" viewBox="0 0 24 24">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        <span>Reset chart view</span>
+      </div>
+      <span class="tv-ctx-key">Alt + R</span>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 2. Copy price -->
+    <div class="tv-ctx-item" data-action="copy_price">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span id="ctx-copy-price-label">Copy price 4,170.30</span>
+      </div>
+    </div>
+
+    <!-- 3. Paste -->
+    <div class="tv-ctx-item" data-action="paste">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Paste</span>
+      </div>
+      <span class="tv-ctx-key">Ctrl + V</span>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 4. Add alert -->
+    <div class="tv-ctx-item" data-action="add_alert">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="13" r="7" />
+          <path d="M12 9v4l2 2" />
+          <path d="M5 3 2 6" />
+          <path d="m22 6-3-3" />
+        </svg>
+        <span id="ctx-alert-label">Add alert on XAUUSD at 4,170.30...</span>
+      </div>
+      <span class="tv-ctx-key">Alt + A</span>
+    </div>
+
+    <!-- 5. Sell limit -->
+    <div class="tv-ctx-item" data-action="sell_limit">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon red" viewBox="0 0 24 24">
+          <path d="m7 9 5 5 5-5" />
+          <path d="m7 4 5 5 5-5" />
+        </svg>
+        <span id="ctx-sell-label">Sell 1 XAUUSD @ 4,170.30 limit</span>
+      </div>
+      <span class="tv-ctx-key">Alt + Shift + S</span>
+    </div>
+
+    <!-- 6. Buy stop -->
+    <div class="tv-ctx-item" data-action="buy_stop">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon green" viewBox="0 0 24 24">
+          <path d="m17 15-5-5-5 5" />
+          <path d="m17 20-5-5-5 5" />
+        </svg>
+        <span id="ctx-buy-label">Buy 1 XAUUSD @ 4,170.30 stop</span>
+      </div>
+    </div>
+
+    <!-- 7. Add order -->
+    <div class="tv-ctx-item" data-action="add_order">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon" viewBox="0 0 24 24">
+          <path d="M3 3v18h18" />
+          <path d="m7 14 4-4 4 4 5-5" />
+          <path d="M16 6h4v4" />
+        </svg>
+        <span id="ctx-order-label">Add order on XAUUSD at 4,170.30...</span>
+      </div>
+      <span class="tv-ctx-key">Shift + T</span>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 8. Move chart -->
+    <div class="tv-ctx-item" data-action="move_chart">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Move chart</span>
+      </div>
+      <span class="tv-ctx-arrow">›</span>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 9. Lock vertical cursor line by time -->
+    <div class="tv-ctx-item" data-action="lock_cursor">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Lock vertical cursor line by time</span>
+      </div>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 10. Table view -->
+    <div class="tv-ctx-item" data-action="table_view">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Table view</span>
+      </div>
+    </div>
+
+    <!-- 11. Object tree -->
+    <div class="tv-ctx-item" data-action="object_tree">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Object tree</span>
+      </div>
+    </div>
+
+    <!-- 12. Chart template -->
+    <div class="tv-ctx-item" data-action="chart_template">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Chart template</span>
+      </div>
+      <span class="tv-ctx-arrow">›</span>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 13. Apply indicators -->
+    <div class="tv-ctx-item" data-action="apply_indicators">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span>Apply these indicators to entire layout</span>
+      </div>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 14a. Delete selected drawing -->
+    <div class="tv-ctx-item danger" id="ctx-delete-selected-drawing" data-action="delete_selected_drawing"
+      style="display: none;">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon" viewBox="0 0 24 24">
+          <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </svg>
+        <span id="ctx-delete-drawing-label">Delete selected drawing</span>
+      </div>
+      <span class="tv-ctx-shortcut">Del</span>
+    </div>
+
+    <!-- 14b. Remove all drawings -->
+    <div class="tv-ctx-item danger" data-action="remove_drawings">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span id="ctx-remove-drawings-label">Remove 0 drawings</span>
+      </div>
+    </div>
+
+    <!-- 15. Remove indicators -->
+    <div class="tv-ctx-item danger" data-action="remove_indicators">
+      <div class="tv-ctx-left">
+        <span class="tv-ctx-spacer"></span>
+        <span id="ctx-remove-indicators-label">Remove 0 indicators</span>
+      </div>
+    </div>
+
+    <div class="tv-ctx-divider"></div>
+
+    <!-- 16. Settings -->
+    <div class="tv-ctx-item" data-action="settings">
+      <div class="tv-ctx-left">
+        <svg class="tv-ctx-icon" viewBox="0 0 24 24">
+          <polygon points="12 2 21 7 21 17 12 22 3 17 3 7 12 2" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span>Settings...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADINGVIEW PRO COLOR PICKER POPOVER (Exact match to User Image) -->
+  <div class="tv-color-picker-dialog" id="tv-color-picker-popover" style="display: none;">
+    <!-- 8x10 Color Palette Grid (80 Swatches matching TradingView) -->
+    <div class="tv-cp-palette" id="tv-cp-palette-grid">
+      <div class="tv-cp-swatch light-border" data-color="#ffffff" style="background-color: #ffffff;"
+        onclick="window.selectColorFromPicker('#ffffff', true)"></div>
+      <div class="tv-cp-swatch light-border" data-color="#e0e3eb" style="background-color: #e0e3eb;"
+        onclick="window.selectColorFromPicker('#e0e3eb', true)"></div>
+      <div class="tv-cp-swatch" data-color="#d1d4dc" style="background-color: #d1d4dc;"
+        onclick="window.selectColorFromPicker('#d1d4dc', true)"></div>
+      <div class="tv-cp-swatch" data-color="#b2b5be" style="background-color: #b2b5be;"
+        onclick="window.selectColorFromPicker('#b2b5be', true)"></div>
+      <div class="tv-cp-swatch" data-color="#9598a1" style="background-color: #9598a1;"
+        onclick="window.selectColorFromPicker('#9598a1', true)"></div>
+      <div class="tv-cp-swatch" data-color="#787b86" style="background-color: #787b86;"
+        onclick="window.selectColorFromPicker('#787b86', true)"></div>
+      <div class="tv-cp-swatch" data-color="#5d606b" style="background-color: #5d606b;"
+        onclick="window.selectColorFromPicker('#5d606b', true)"></div>
+      <div class="tv-cp-swatch" data-color="#434651" style="background-color: #434651;"
+        onclick="window.selectColorFromPicker('#434651', true)"></div>
+      <div class="tv-cp-swatch" data-color="#2a2e39" style="background-color: #2a2e39;"
+        onclick="window.selectColorFromPicker('#2a2e39', true)"></div>
+      <div class="tv-cp-swatch" data-color="#000000" style="background-color: #000000;"
+        onclick="window.selectColorFromPicker('#000000', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f23645" style="background-color: #f23645;"
+        onclick="window.selectColorFromPicker('#f23645', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ff9800" style="background-color: #ff9800;"
+        onclick="window.selectColorFromPicker('#ff9800', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ffeb3b" style="background-color: #ffeb3b;"
+        onclick="window.selectColorFromPicker('#ffeb3b', true)"></div>
+      <div class="tv-cp-swatch" data-color="#4caf50" style="background-color: #4caf50;"
+        onclick="window.selectColorFromPicker('#4caf50', true)"></div>
+      <div class="tv-cp-swatch" data-color="#00897b" style="background-color: #00897b;"
+        onclick="window.selectColorFromPicker('#00897b', true)"></div>
+      <div class="tv-cp-swatch" data-color="#00bcd4" style="background-color: #00bcd4;"
+        onclick="window.selectColorFromPicker('#00bcd4', true)"></div>
+      <div class="tv-cp-swatch" data-color="#2962ff" style="background-color: #2962ff;"
+        onclick="window.selectColorFromPicker('#2962ff', true)"></div>
+      <div class="tv-cp-swatch" data-color="#7b1fa2" style="background-color: #7b1fa2;"
+        onclick="window.selectColorFromPicker('#7b1fa2', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ab47bc" style="background-color: #ab47bc;"
+        onclick="window.selectColorFromPicker('#ab47bc', true)"></div>
+      <div class="tv-cp-swatch" data-color="#e91e63" style="background-color: #e91e63;"
+        onclick="window.selectColorFromPicker('#e91e63', true)"></div>
+      <div class="tv-cp-swatch" data-color="#fccbcd" style="background-color: #fccbcd;"
+        onclick="window.selectColorFromPicker('#fccbcd', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ffe0b2" style="background-color: #ffe0b2;"
+        onclick="window.selectColorFromPicker('#ffe0b2', true)"></div>
+      <div class="tv-cp-swatch light-border" data-color="#fff9c4" style="background-color: #fff9c4;"
+        onclick="window.selectColorFromPicker('#fff9c4', true)"></div>
+      <div class="tv-cp-swatch" data-color="#c8e6c9" style="background-color: #c8e6c9;"
+        onclick="window.selectColorFromPicker('#c8e6c9', true)"></div>
+      <div class="tv-cp-swatch" data-color="#b2dfdb" style="background-color: #b2dfdb;"
+        onclick="window.selectColorFromPicker('#b2dfdb', true)"></div>
+      <div class="tv-cp-swatch" data-color="#b3e5fc" style="background-color: #b3e5fc;"
+        onclick="window.selectColorFromPicker('#b3e5fc', true)"></div>
+      <div class="tv-cp-swatch" data-color="#c5cae9" style="background-color: #c5cae9;"
+        onclick="window.selectColorFromPicker('#c5cae9', true)"></div>
+      <div class="tv-cp-swatch" data-color="#d1c4e9" style="background-color: #d1c4e9;"
+        onclick="window.selectColorFromPicker('#d1c4e9', true)"></div>
+      <div class="tv-cp-swatch" data-color="#e1bee7" style="background-color: #e1bee7;"
+        onclick="window.selectColorFromPicker('#e1bee7', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f8bbd0" style="background-color: #f8bbd0;"
+        onclick="window.selectColorFromPicker('#f8bbd0', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ff9da4" style="background-color: #ff9da4;"
+        onclick="window.selectColorFromPicker('#ff9da4', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ffcc80" style="background-color: #ffcc80;"
+        onclick="window.selectColorFromPicker('#ffcc80', true)"></div>
+      <div class="tv-cp-swatch light-border" data-color="#fff59d" style="background-color: #fff59d;"
+        onclick="window.selectColorFromPicker('#fff59d', true)"></div>
+      <div class="tv-cp-swatch" data-color="#a5d6a7" style="background-color: #a5d6a7;"
+        onclick="window.selectColorFromPicker('#a5d6a7', true)"></div>
+      <div class="tv-cp-swatch" data-color="#80cbc4" style="background-color: #80cbc4;"
+        onclick="window.selectColorFromPicker('#80cbc4', true)"></div>
+      <div class="tv-cp-swatch" data-color="#81d4fa" style="background-color: #81d4fa;"
+        onclick="window.selectColorFromPicker('#81d4fa', true)"></div>
+      <div class="tv-cp-swatch" data-color="#9fa8da" style="background-color: #9fa8da;"
+        onclick="window.selectColorFromPicker('#9fa8da', true)"></div>
+      <div class="tv-cp-swatch" data-color="#b39ddb" style="background-color: #b39ddb;"
+        onclick="window.selectColorFromPicker('#b39ddb', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ce93d8" style="background-color: #ce93d8;"
+        onclick="window.selectColorFromPicker('#ce93d8', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f48fb1" style="background-color: #f48fb1;"
+        onclick="window.selectColorFromPicker('#f48fb1', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f77c80" style="background-color: #f77c80;"
+        onclick="window.selectColorFromPicker('#f77c80', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ffb74d" style="background-color: #ffb74d;"
+        onclick="window.selectColorFromPicker('#ffb74d', true)"></div>
+      <div class="tv-cp-swatch" data-color="#fff176" style="background-color: #fff176;"
+        onclick="window.selectColorFromPicker('#fff176', true)"></div>
+      <div class="tv-cp-swatch" data-color="#81c784" style="background-color: #81c784;"
+        onclick="window.selectColorFromPicker('#81c784', true)"></div>
+      <div class="tv-cp-swatch" data-color="#4db6ac" style="background-color: #4db6ac;"
+        onclick="window.selectColorFromPicker('#4db6ac', true)"></div>
+      <div class="tv-cp-swatch" data-color="#4fc3f7" style="background-color: #4fc3f7;"
+        onclick="window.selectColorFromPicker('#4fc3f7', true)"></div>
+      <div class="tv-cp-swatch" data-color="#7986cb" style="background-color: #7986cb;"
+        onclick="window.selectColorFromPicker('#7986cb', true)"></div>
+      <div class="tv-cp-swatch" data-color="#9575cd" style="background-color: #9575cd;"
+        onclick="window.selectColorFromPicker('#9575cd', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ba68c8" style="background-color: #ba68c8;"
+        onclick="window.selectColorFromPicker('#ba68c8', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f06292" style="background-color: #f06292;"
+        onclick="window.selectColorFromPicker('#f06292', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f23645" style="background-color: #f23645;"
+        onclick="window.selectColorFromPicker('#f23645', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ffa726" style="background-color: #ffa726;"
+        onclick="window.selectColorFromPicker('#ffa726', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ffee58" style="background-color: #ffee58;"
+        onclick="window.selectColorFromPicker('#ffee58', true)"></div>
+      <div class="tv-cp-swatch" data-color="#4caf50" style="background-color: #4caf50;"
+        onclick="window.selectColorFromPicker('#4caf50', true)"></div>
+      <div class="tv-cp-swatch" data-color="#26a69a" style="background-color: #26a69a;"
+        onclick="window.selectColorFromPicker('#26a69a', true)"></div>
+      <div class="tv-cp-swatch" data-color="#29b6f6" style="background-color: #29b6f6;"
+        onclick="window.selectColorFromPicker('#29b6f6', true)"></div>
+      <div class="tv-cp-swatch" data-color="#5c6bc0" style="background-color: #5c6bc0;"
+        onclick="window.selectColorFromPicker('#5c6bc0', true)"></div>
+      <div class="tv-cp-swatch" data-color="#7e57c2" style="background-color: #7e57c2;"
+        onclick="window.selectColorFromPicker('#7e57c2', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ab47bc" style="background-color: #ab47bc;"
+        onclick="window.selectColorFromPicker('#ab47bc', true)"></div>
+      <div class="tv-cp-swatch" data-color="#ec407a" style="background-color: #ec407a;"
+        onclick="window.selectColorFromPicker('#ec407a', true)"></div>
+      <div class="tv-cp-swatch" data-color="#c2185b" style="background-color: #c2185b;"
+        onclick="window.selectColorFromPicker('#c2185b', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f57c00" style="background-color: #f57c00;"
+        onclick="window.selectColorFromPicker('#f57c00', true)"></div>
+      <div class="tv-cp-swatch" data-color="#fbc02d" style="background-color: #fbc02d;"
+        onclick="window.selectColorFromPicker('#fbc02d', true)"></div>
+      <div class="tv-cp-swatch" data-color="#388e3c" style="background-color: #388e3c;"
+        onclick="window.selectColorFromPicker('#388e3c', true)"></div>
+      <div class="tv-cp-swatch" data-color="#00897b" style="background-color: #00897b;"
+        onclick="window.selectColorFromPicker('#00897b', true)"></div>
+      <div class="tv-cp-swatch" data-color="#0288d1" style="background-color: #0288d1;"
+        onclick="window.selectColorFromPicker('#0288d1', true)"></div>
+      <div class="tv-cp-swatch" data-color="#3949ab" style="background-color: #3949ab;"
+        onclick="window.selectColorFromPicker('#3949ab', true)"></div>
+      <div class="tv-cp-swatch" data-color="#5e35b1" style="background-color: #5e35b1;"
+        onclick="window.selectColorFromPicker('#5e35b1', true)"></div>
+      <div class="tv-cp-swatch" data-color="#8e24aa" style="background-color: #8e24aa;"
+        onclick="window.selectColorFromPicker('#8e24aa', true)"></div>
+      <div class="tv-cp-swatch" data-color="#d81b60" style="background-color: #d81b60;"
+        onclick="window.selectColorFromPicker('#d81b60', true)"></div>
+      <div class="tv-cp-swatch" data-color="#7f0000" style="background-color: #7f0000;"
+        onclick="window.selectColorFromPicker('#7f0000', true)"></div>
+      <div class="tv-cp-swatch" data-color="#e65100" style="background-color: #e65100;"
+        onclick="window.selectColorFromPicker('#e65100', true)"></div>
+      <div class="tv-cp-swatch" data-color="#f57f17" style="background-color: #f57f17;"
+        onclick="window.selectColorFromPicker('#f57f17', true)"></div>
+      <div class="tv-cp-swatch" data-color="#1b5e20" style="background-color: #1b5e20;"
+        onclick="window.selectColorFromPicker('#1b5e20', true)"></div>
+      <div class="tv-cp-swatch" data-color="#004d40" style="background-color: #004d40;"
+        onclick="window.selectColorFromPicker('#004d40', true)"></div>
+      <div class="tv-cp-swatch" data-color="#01579b" style="background-color: #01579b;"
+        onclick="window.selectColorFromPicker('#01579b', true)"></div>
+      <div class="tv-cp-swatch" data-color="#1a237e" style="background-color: #1a237e;"
+        onclick="window.selectColorFromPicker('#1a237e', true)"></div>
+      <div class="tv-cp-swatch" data-color="#311b92" style="background-color: #311b92;"
+        onclick="window.selectColorFromPicker('#311b92', true)"></div>
+      <div class="tv-cp-swatch" data-color="#4a148c" style="background-color: #4a148c;"
+        onclick="window.selectColorFromPicker('#4a148c', true)"></div>
+      <div class="tv-cp-swatch" data-color="#880e4f" style="background-color: #880e4f;"
+        onclick="window.selectColorFromPicker('#880e4f', true)"></div>
+    </div>
+    <!-- Divider Line -->
+    <div class="tv-cp-divider"></div>
+
+    <!-- Custom Color (+) -->
+    <div class="tv-cp-custom-row">
+      <button type="button" class="tv-cp-plus-btn" id="tv-cp-custom-btn" title="Add custom color">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+          <line x1="8" y1="2" x2="8" y2="14" stroke-linecap="round" />
+          <line x1="2" y1="8" x2="14" y2="8" stroke-linecap="round" />
+        </svg>
+      </button>
+      <input type="color" id="tv-cp-native-color-picker"
+        style="opacity: 0; width: 0; height: 0; position: absolute; pointer-events: none;">
+    </div>
+
+    <!-- Opacity Section -->
+    <div class="tv-cp-opacity-section">
+      <div class="tv-cp-opacity-label">Opacity</div>
+      <div class="tv-cp-opacity-controls">
+        <div class="tv-cp-slider-track-wrap">
+          <div class="tv-cp-checkered-bg"></div>
+          <div class="tv-cp-gradient-overlay" id="tv-cp-gradient-overlay"></div>
+          <input type="range" class="tv-cp-opacity-slider" id="tv-cp-opacity-slider" min="0" max="100" value="100">
+        </div>
+        <input type="text" class="tv-cp-opacity-badge" id="tv-cp-opacity-badge" value="100%" maxlength="4">
+      </div>
+    </div>
+  </div>
+  <!-- VENDOR & APPLICATION JAVASCRIPT -->
+  <script src="libs/lightweight-charts.standalone.production.js"></script>
+  <script>
+    if (typeof LightweightCharts === 'undefined') {
+      document.write('<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"><\\/script>');
+    }
+  </script>
+  <script src="js/i18n.js?v=5.0"></script>
+  <script src="js/storage.js?v=5.0"></script>
+  <script src="js/auth.js?v=5.0"></script>
+  <script src="js/forexcom-data.js?v=5.0"></script>
+  <script src="js/data-feed.js?v=5.0"></script>
+  <script src="js/indicators.js?v=5.0"></script>
+  <script src="js/drawings.js?v=5.0"></script>
+  <script src="js/paper-trading.js?v=5.0"></script>
+  <script src="js/multi-chart.js?v=5.0"></script>
+  <script src="js/app.js?v=5.0"></script>
+
+  <!-- SERVICE WORKER REGISTRATION (Offline & Instant Asset Caching) -->
+  <script>
+    if ('serviceWorker' in navigator && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('[SW] ServiceWorker registered scope:', reg.scope))
+          .catch(err => console.log('[SW] ServiceWorker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+
+</html>
